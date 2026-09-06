@@ -453,20 +453,29 @@
       </div>
     </aside>
 
+    <!-- ── SIDEBAR BACKDROP FOR MOBILE ────────────────────────── -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
     <!-- ── MAIN WRAPPER ──────────────────────────────────── -->
     <div class="main-wrapper">
 
       <!-- Page Topbar (sticky breadcrumb + title) -->
       <div class="page-topbar" role="navigation" aria-label="Breadcrumb">
-        <div class="page-topbar-left">
-          <div class="page-topbar-title" id="topbar-page-title">Executive Dashboard</div>
-          <nav class="page-breadcrumb" aria-label="breadcrumb">
-            <a href="#">Home</a>
-            <span class="breadcrumb-sep">›</span>
-            <a href="#">MPLADS Monitor</a>
-            <span class="breadcrumb-sep">›</span>
-            <span id="topbar-breadcrumb-current">Dashboard</span>
-          </nav>
+        <div class="page-topbar-left-wrap">
+          <button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu" title="Open Navigation Menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <span>Menu</span>
+          </button>
+          <div class="page-topbar-left">
+            <div class="page-topbar-title" id="topbar-page-title">Executive Dashboard</div>
+            <nav class="page-breadcrumb" aria-label="breadcrumb">
+              <a href="#">Home</a>
+              <span class="breadcrumb-sep">›</span>
+              <a href="#">MPLADS Monitor</a>
+              <span class="breadcrumb-sep">›</span>
+              <span id="topbar-breadcrumb-current">Dashboard</span>
+            </nav>
+          </div>
         </div>
         <div class="page-topbar-actions">
           <span class="topbar-date" id="topbar-datetime">—</span>

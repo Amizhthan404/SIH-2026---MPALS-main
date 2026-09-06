@@ -36,8 +36,27 @@ const GOV_AVATAR_COLORS = [
 ];
 function gradForIdx(i) { return GOV_AVATAR_COLORS[i % GOV_AVATAR_COLORS.length]; }
 
+// ── Mobile Sidebar Drawer ──────────────────────────────────────────
+function toggleMobileSidebar(force) {
+  const sidebar = document.querySelector('.sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (!sidebar) return;
+  const isOpen = sidebar.classList.contains('mobile-open');
+  const next = force !== undefined ? force : !isOpen;
+  if (next) {
+    sidebar.classList.add('mobile-open');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.classList.add('mobile-drawer-open');
+  } else {
+    sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.classList.remove('mobile-drawer-open');
+  }
+}
+
 // ── Router ─────────────────────────────────────────────────────────────
 function navigate(page) {
+  toggleMobileSidebar(false);
   document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
