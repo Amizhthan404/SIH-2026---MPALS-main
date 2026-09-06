@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mpals-ai-monitoring
+    runtime: node
+    plan: free
+    buildCommand: npm --prefix server install && npm --prefix server run db:setup && npm --prefix server run build
+    startCommand: npm --prefix server run start
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: DB_TYPE
+        value: sqlite
+      - key: SQLITE_PATH
+        value: ./db/mplads.sqlite
