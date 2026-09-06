@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MPALS — MPLADS Anomaly & Lifecycle Surveillance | SIH 2026 Prototype</title>
+  <meta name="description" content="AI-assisted statistical anomaly detection and monitoring platform for MPLADS fund utilization. Student prototype developed for Smart India Hackathon 2026, Problem Statement 26102."/>
+  <meta name="keywords" content="MPLADS, Anomaly Detection, Fund Monitoring, MoSPI, Smart India Hackathon 2026, PS 26102"/>
+  <meta name="author" content="SIH 2026 Student Team • Problem Statement 26102"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+
+  <!-- Leaflet Real Interactive Map Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Vendored Local Chart.js with CDN fallback -->
+  <script src="vendor/chartjs/chart.umd.min.js"></script>
+  <script>window.Chart || document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"><\/script>')</script>
+
+  <style>
+    /* Page-level overrides and emblem SVG */
+    .emblem-svg {
+      width: 52px; height: 52px; flex-shrink: 0;
+    }
+    .mplads-logo-text {
+      font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .report-section { margin-bottom: var(--sp-6); }
+    .report-section h3 {
+      font-size: 0.88rem; font-weight: 700; color: var(--gov-navy);
+      border-bottom: 2px solid var(--gov-saffron);
+      padding-bottom: var(--sp-2); margin-bottom: var(--sp-4);
+    }
+    .method-card {
+      background: var(--bg-white);
+      border: 1px solid var(--bdr-light);
+      border-radius: var(--r-md);
+      padding: var(--sp-4);
+      border-top: 3px solid var(--gov-navy);
+    }
+    .method-card h4 { font-size: 0.8rem; font-weight: 700; color: var(--gov-navy); margin-bottom: 6px; }
+    .method-card p  { font-size: 0.76rem; color: var(--txt-secondary); line-height: 1.6; }
+    .findings-list  { list-style: none; display: flex; flex-direction: column; gap: var(--sp-3); }
+    .findings-list li {
+      display: flex; gap: var(--sp-3);
+      font-size: 0.82rem; color: var(--txt-secondary); line-height: 1.6;
+      padding: var(--sp-3) var(--sp-4);
+      background: var(--bg-light);
+      border-left: 3px solid var(--gov-navy);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    }
+    .findings-list li .fi-icon { flex-shrink: 0; font-size: 0.85rem; margin-top: 1px; }
+    .recs-list { list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
+    .recs-list li {
+      display: flex; gap: var(--sp-3); align-items: flex-start;
+      font-size: 0.82rem; color: var(--txt-secondary); line-height: 1.6;
+      padding: var(--sp-3) var(--sp-4);
+      border-left: 3px solid var(--gov-green);
+      background: var(--gov-green-lt);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    }
+    .summary-box {
+      background: var(--bg-light);
+      border: 1px solid var(--bdr-light);
+      border-radius: var(--r-md);
+      padding: var(--sp-4) var(--sp-5);
+      margin-bottom: var(--sp-5);
+    }
+    .summary-box-title {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--txt-muted); margin-bottom: var(--sp-3);
+    }
+    .summary-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3);
+    }
+    .summary-cell {
+      background: var(--bg-white);
+      border: 1px solid var(--bdr-light);
+      border-radius: var(--r-sm);
+      padding: var(--sp-3) var(--sp-4);
+    }
+    .summary-cell-label { font-size: 0.68rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .summary-cell-value { font-size: 0.95rem; font-weight: 700; color: var(--txt-primary); margin-top: 3px; }
+    .alert-severity-bar {
+      display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: var(--sp-2);
+    }
+    .works-flag-card {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      border: 1px solid var(--bdr-light);
+      border-radius: var(--r-sm);
+      background: var(--bg-white);
+    }
+    .works-flag-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .works-flag-count { font-size: 1.3rem; font-weight: 700; font-family: var(--font-mono); color: var(--txt-primary); }
+    .works-flag-label { font-size: 0.72rem; color: var(--txt-muted); }
+    @media print {
+      .sidebar,.gov-infobar,.page-topbar,.alert-topbar,.welcome-overlay,.toast-container,
+      .btn,.pagination-bar,.filter-bar,.tab-bar,.panel-actions,.section-header-right { display:none!important; }
+      .main-wrapper,.app-body { height:auto!important; overflow:visible!important; }
+      .page-content.active { animation:none!important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ DEDICATED OFFICIAL GOV LOGIN GATEWAY LANDING PAGE ═══════════════ -->
+<div id="login-landing-page" class="login-page-wrapper">
+  <div class="gov-tricolor" role="presentation">
+    <div class="tricolor-block tricolor-saffron"></div>
+    <div class="tricolor-block tricolor-white">
+      <div class="ashoka-chakra-center" title="Ashoka Chakra — 24 Spokes">
+        <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#000088" stroke-width="2.5"/>
+          <circle cx="20" cy="20" r="4" fill="#000088"/>
+          <g stroke="#000088" stroke-width="1.5">
+            <line x1="20" y1="2" x2="20" y2="38"/>
+            <line x1="2" y1="20" x2="38" y2="20"/>
+            <line x1="7.27" y1="7.27" x2="32.73" y2="32.73"/>
+            <line x1="7.27" y1="32.73" x2="32.73" y2="7.27"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(15 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(30 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(45 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(60 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(75 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(105 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(120 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(135 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(150 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(165 20 20)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="tricolor-block tricolor-green"></div>
+  </div>
+  
+  <div class="login-header-banner">
+    <div class="login-header-title">
+      <div style="font-size:1.8rem">🇮🇳</div>
+      <div>
+        <div style="font-size:1.05rem;font-weight:700;letter-spacing:0.02em">Ministry of Statistics &amp; Programme Implementation (MoSPI)</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.75)">Government of India • Cyber-Audit Security Portal • SIH 2026 Problem Statement 26102</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-size:0.72rem;background:rgba(255,255,255,0.15);padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.2)">🔒 256-bit SSL Encrypted</span>
+      <span class="prototype-badge">SIH 2026 PROTOTYPE</span>
+    </div>
+  </div>
+
+  <div class="login-body-grid">
+    <!-- Left: Official Login Card -->
+    <div class="login-sec-card">
+      <h2>🔐 Official Portal Sign In</h2>
+      <p>Enter your official NIC / MoSPI government credentials to access jurisdictional audit surveillance intelligence.</p>
+
+      <form onsubmit="event.preventDefault(); submitLandingLogin();">
+        <div class="login-form-group">
+          <label for="landing-email">Official Email Address</label>
+          <input type="email" id="landing-email" class="login-form-input" placeholder="officer@mospi.gov.in" value="admin@mospi.gov.in" required/>
+        </div>
+
+        <div class="login-form-group">
+          <label for="landing-password">Password</label>
+          <input type="password" id="landing-password" class="login-form-input" placeholder="Password" value="Password@123" required/>
+        </div>
+
+        <div class="login-form-group">
+          <label>Security Anti-Bot Captcha Verification</label>
+          <div class="login-captcha-box">
+            <span class="login-captcha-code" id="landing-captcha-display">MPLADS-26102</span>
+            <input type="text" id="landing-captcha-input" class="login-form-input" placeholder="Enter code" value="MPLADS-26102" style="width:130px;text-transform:uppercase" required/>
+            <button type="button" class="btn btn-secondary btn-xs" onclick="refreshCaptcha()" title="Refresh Captcha">🔄</button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn-submit" style="margin-top:8px">SIGN IN TO SECURE AUDIT DASHBOARD →</button>
+      </form>
+
+      <div style="margin-top:16px;text-align:center">
+        <button class="btn btn-link" onclick="enterPublicGuestModeLanding()" style="font-size:0.78rem">Continue as Public Viewer (Unauthenticated Demo Mode) →</button>
+      </div>
+    </div>
+
+    <!-- Right: Pre-configured Official Roles Cheat-Sheet -->
+    <div class="login-roles-hint-panel">
+      <div class="login-roles-hint-title">⚡ Official Test Authority Cheat-Sheet</div>
+      <div class="login-roles-hint-sub">Select any pre-configured official role below to 1-click auto fill credentials & test real authorization:</div>
+
+      <div class="login-role-demo-card">
+        <div>
+          <div style="font-weight:700;font-size:0.84rem;color:#003366">🏛️ Ministry Admin (MoSPI)</div>
+          <div style="font-size:0.72rem;color:#64748B">Scope: National (All 773 MPs &amp; 36 States)</div>
+          <div style="font-size:0.7rem;font-family:var(--font-mono);color:#003366">admin@mospi.gov.in &bull; Password@123</div>
+        </div>
+        <button class="btn btn-primary btn-xs" onclick="autoFillLandingRole('admin@mospi.gov.in', 'Password@123')">Auto Sign In</button>
+      </div>
+
+      <div class="login-role-demo-card">
+        <div>
+          <div style="font-weight:700;font-size:0.84rem;color:#138808">🏢 State Nodal Officer</div>
+          <div style="font-size:0.72rem;color:#64748B">Scope: State Jurisdiction (Maharashtra Only)</div>
+          <div style="font-size:0.7rem;font-family:var(--font-mono);color:#138808">nodal.maharashtra@gov.in &bull; Password@123</div>
+        </div>
+        <button class="btn btn-primary btn-xs" onclick="autoFillLandingRole('nodal.maharashtra@gov.in', 'Password@123')">Auto Sign In</button>
+      </div>
+
+      <div class="login-role-demo-card">
+        <div>
+          <div style="font-weight:700;font-size:0.84rem;color:#D97706">📍 District Collector</div>
+          <div style="font-size:0.72rem;color:#64748B">Scope: District Level (Mumbai City District)</div>
+          <div style="font-size:0.7rem;font-family:var(--font-mono);color:#D97706">dm.mumbai@nic.in &bull; Password@123</div>
+        </div>
+        <button class="btn btn-primary btn-xs" onclick="autoFillLandingRole('dm.mumbai@nic.in', 'Password@123')">Auto Sign In</button>
+      </div>
+
+      <div class="login-role-demo-card">
+        <div>
+          <div style="font-weight:700;font-size:0.84rem;color:#7C3AED">👤 Hon'ble MP</div>
+          <div style="font-size:0.72rem;color:#64748B">Scope: Personal Constituency &amp; Works Ledgers</div>
+          <div style="font-size:0.7rem;font-family:var(--font-mono);color:#7C3AED">mp.abhishek@sansad.nic.in &bull; Password@123</div>
+        </div>
+        <button class="btn btn-primary btn-xs" onclick="autoFillLandingRole('mp.abhishek@sansad.nic.in', 'Password@123')">Auto Sign In</button>
+      </div>
+
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:12px;line-height:1.4">
+        ℹ️ <strong>Judicial Audit Notice:</strong> Password hints are provided for evaluator testing during Smart India Hackathon 2026 evaluation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WELCOME SCREEN ═════════════════════════════════════════════════ -->
+<div id="welcome-overlay" class="welcome-overlay">
+  <div class="welcome-emblem">🇮🇳</div>
+  <div class="welcome-title">MPALS — MPLADS Anomaly & Lifecycle Surveillance</div>
+  <div class="welcome-subtitle">Student Prototype for Smart India Hackathon 2026 • Problem Statement 26102</div>
+  <div style="margin-top:8px;font-size:0.75rem;color:rgba(255,255,255,0.7)">Non-official academic prototype developed for MoSPI Scheme Intelligence</div>
+  <div class="welcome-progress">
+    <div class="welcome-progress-bar"></div>
+  </div>
+  <div style="margin-top:var(--sp-4);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:0.08em;text-transform:uppercase">
+    Connecting to Statistical Anomaly Engine&hellip;
+  </div>
+</div>
+
+<!-- ══ TOAST CONTAINER ════════════════════════════════════════════════ -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ══ APP SHELL ══════════════════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- ── TRICOLOR STRIP WITH ASHOKA CHAKRA ── -->
+  <div class="gov-tricolor" role="presentation">
+    <div class="tricolor-block tricolor-saffron"></div>
+    <div class="tricolor-block tricolor-white">
+      <div class="ashoka-chakra-center" title="Ashoka Chakra — 24 Spokes">
+        <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#000088" stroke-width="2.5"/>
+          <circle cx="20" cy="20" r="4" fill="#000088"/>
+          <g stroke="#000088" stroke-width="1.5">
+            <line x1="20" y1="2" x2="20" y2="38"/>
+            <line x1="2" y1="20" x2="38" y2="20"/>
+            <line x1="7.27" y1="7.27" x2="32.73" y2="32.73"/>
+            <line x1="7.27" y1="32.73" x2="32.73" y2="7.27"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(15 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(30 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(45 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(60 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(75 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(105 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(120 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(135 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(150 20 20)"/>
+            <line x1="20" y1="2" x2="20" y2="38" transform="rotate(165 20 20)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="tricolor-block tricolor-green"></div>
+  </div>
+
+  <!-- ── TOP INFO BAR ── -->
+  <div class="gov-infobar" role="navigation" aria-label="Utility navigation">
+    <div class="infobar-left">
+      <span>Smart India Hackathon 2026</span>
+      <span class="infobar-sep">|</span>
+      <span>PS ID: 26102 (MoSPI)</span>
+      <span class="infobar-sep">|</span>
+      <span class="prototype-badge" style="margin-left:0">Student Prototype</span>
+    </div>
+    <div class="infobar-right">
+      <span>Last Refresh: <strong id="last-updated">Live</strong></span>
+      <span class="infobar-sep">|</span>
+      <span class="data-provenance-tag" title="MP Records: Source-derived from official MPLADS allocation records; Works, payments and asset events are simulated demonstration records">DATA MODE: HYBRID PROTOTYPE ℹ️</span>
+      <span class="infobar-sep">|</span>
+      <button id="btn-auth-role" class="auth-role-btn" onclick="openAuthModal()" title="Switch authenticated user role or sign in">
+        <span id="auth-role-icon">👤</span>
+        <span id="auth-role-text">Public Viewer (Demo)</span> ▾
+      </button>
+      <button class="btn btn-secondary btn-xs" onclick="signOutToLandingPage()" title="Lock session & return to Official Gateway">🔒 Sign Out</button>
+    </div>
+  </div>
+
+  <!-- ── MAIN GOV HEADER ── -->
+  <header class="gov-header" role="banner">
+    <!-- Ashoka Emblem (SVG inline) -->
+    <div style="width:52px;height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+      <svg viewBox="0 0 80 80" width="52" height="52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="40" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+        <circle cx="40" cy="35" r="22" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <circle cx="40" cy="35" r="5" fill="rgba(255,255,255,0.7)"/>
+        <!-- Simplified spokes -->
+        <g stroke="rgba(255,255,255,0.5)" stroke-width="1">
+          <line x1="40" y1="13" x2="40" y2="57"/>
+          <line x1="18" y1="35" x2="62" y2="35"/>
+          <line x1="24" y1="19" x2="56" y2="51"/>
+          <line x1="56" y1="19" x2="24" y2="51"/>
+          <line x1="18" y1="28" x2="62" y2="42"/>
+          <line x1="18" y1="42" x2="62" y2="28"/>
+          <line x1="28" y1="14" x2="52" y2="56"/>
+          <line x1="52" y1="14" x2="28" y2="56"/>
+          <line x1="14" y1="42" x2="66" y2="28"/>
+          <line x1="14" y1="28" x2="66" y2="42"/>
+          <line x1="22" y1="52" x2="58" y2="18"/>
+          <line x1="22" y1="18" x2="58" y2="52"/>
+        </g>
+        <text x="40" y="72" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.75)" font-family="Noto Sans,sans-serif" font-weight="600" letter-spacing="2">SIH</text>
+      </svg>
+    </div>
+
+    <!-- Title block -->
+    <div class="gov-header-text">
+      <div class="gov-ministry-en">
+        MPALS — MPLADS Anomaly &amp; Lifecycle Surveillance
+        <span class="prototype-badge">SIH 2026 Prototype</span>
+      </div>
+      <div class="gov-ministry-hi">
+        स्मार्ट इंडिया हैकथॉन 2026 &nbsp;|&nbsp;
+        <span style="font-size:0.72rem;opacity:0.85">Problem Statement 26102 • Decision Support &amp; Audit Layer for MPLADS</span>
+      </div>
+    </div>
+
+    <!-- Right side info -->
+    <div class="gov-header-right">
+      <div style="text-align:right">
+        <div style="font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.9)">Audit Decision Support</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:1px">Statistical Anomaly &amp; Risk Prioritization</div>
+      </div>
+      <div style="width:1px;height:36px;background:rgba(255,255,255,0.15)"></div>
+      <div class="gov-ps-badge">PS ID: 26102</div>
+      <div class="ai-status-pill">
+        <div class="ai-dot"></div>
+        Anomaly Engine Active
+      </div>
+    </div>
+  </header>
+
+  <!-- ── APP BODY ── -->
+  <div class="app-body">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────── -->
+    <aside class="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <div class="mplads-logo-text">Navigation</div>
+        <div class="sidebar-header-sub">MPLADS AI Monitor</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-label">Overview</div>
+          <a class="nav-item active" data-page="dashboard" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            Executive Dashboard
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">AI Detection</div>
+          <a class="nav-item" data-page="anomalies" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Anomaly Detection
+            <span class="nav-badge" id="nav-badge-anomalies">—</span>
+          </a>
+          <a class="nav-item" data-page="alerts" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            Alerts &amp; Flags
+            <span class="nav-badge" id="nav-badge-alerts">—</span>
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Analytics</div>
+          <a class="nav-item" data-page="analytics" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            Statistical Analysis
+          </a>
+          <a class="nav-item" data-page="works" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Works Monitoring
+          </a>
+          <a class="nav-item" data-page="map" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+              <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+            </svg>
+            Geographic View
+          </a>
+        </div>
+
+        <div class="nav-group">
+          <div class="nav-group-label">Reports</div>
+          <a class="nav-item" data-page="report" role="menuitem" tabindex="0">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            AI Audit Report
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <strong>AI Detection Methods</strong><br/>
+        Z-Score &bull; IQR Fencing &bull; Peer Analysis<br/>
+        Duplicate Detection &bull; Term Compliance<br/><br/>
+        <span style="font-size:0.62rem">© 2026 SIH Team &bull; PS 26102 &bull; Student Prototype</span>
+      </div>
+    </aside>
+
+    <!-- ── MAIN WRAPPER ──────────────────────────────────── -->
+    <div class="main-wrapper">
+
+      <!-- Page Topbar (sticky breadcrumb + title) -->
+      <div class="page-topbar" role="navigation" aria-label="Breadcrumb">
+        <div class="page-topbar-left">
+          <div class="page-topbar-title" id="topbar-page-title">Executive Dashboard</div>
+          <nav class="page-breadcrumb" aria-label="breadcrumb">
+            <a href="#">Home</a>
+            <span class="breadcrumb-sep">›</span>
+            <a href="#">MPLADS Monitor</a>
+            <span class="breadcrumb-sep">›</span>
+            <span id="topbar-breadcrumb-current">Dashboard</span>
+          </nav>
+        </div>
+        <div class="page-topbar-actions">
+          <span class="topbar-date" id="topbar-datetime">—</span>
+          <button class="btn btn-secondary btn-sm" onclick="exportAlertsCSV()" title="Export alerts data as CSV">
+            ↓ Export CSV
+          </button>
+          <button class="btn btn-saffron btn-sm" onclick="navigate('report')">
+            &#9998; Generate Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Alert Ticker -->
+      <div class="alert-topbar" role="status" aria-live="polite" aria-label="System alerts">
+        <span class="alert-topbar-label">&#9888; Alerts</span>
+        <div class="ticker-wrapper">
+          <div class="ticker-inner" id="alert-ticker">Loading system alerts…</div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: EXECUTIVE DASHBOARD                             -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content active" id="page-dashboard" role="main" aria-label="Executive Dashboard">
+
+        <!-- KPI Row -->
+        <div class="kpi-grid stagger-in" aria-label="Key Performance Indicators">
+          <div class="kpi-card accent-blue" role="region" aria-label="Total MPs">
+            <div class="kpi-header">
+              <div class="kpi-label-top">Total MPs Analysed</div>
+              <div class="kpi-icon-box blue">👥</div>
+            </div>
+            <div class="kpi-value"><span id="kpi-total-mps">—</span></div>
+            <div class="kpi-sublabel">Rajya Sabha — Current &amp; Full dataset</div>
+          </div>
+          <div class="kpi-card accent-saffron" role="region" aria-label="Total Funds">
+            <div class="kpi-header">
+              <div class="kpi-label-top">Total Funds Allocated</div>
+              <div class="kpi-icon-box saffron">₹</div>
+            </div>
+            <div class="kpi-value">₹<span id="kpi-total-funds">—</span></div>
+            <div class="kpi-sublabel">Combined MPLADS fund allocation</div>
+          </div>
+          <div class="kpi-card accent-red" role="region" aria-label="Anomalies">
+            <div class="kpi-header">
+              <div class="kpi-label-top">Anomalies Detected</div>
+              <div class="kpi-icon-box red">⚠</div>
+            </div>
+            <div class="kpi-value"><span id="kpi-anomalies">—</span></div>
+            <div class="kpi-sublabel">MPs with composite risk score ≥ 25</div>
+            <div class="kpi-change down" aria-label="Requires review">▼ Requires immediate review</div>
+          </div>
+          <div class="kpi-card" role="region" aria-label="Alerts">
+            <div class="kpi-header">
+              <div class="kpi-label-top">Total Alerts Generated</div>
+              <div class="kpi-icon-box navy">🔔</div>
+            </div>
+            <div class="kpi-value"><span id="kpi-alerts">—</span></div>
+            <div class="kpi-sublabel">All severity levels combined</div>
+          </div>
+          <div class="kpi-card accent-red" role="region" aria-label="Critical Risk">
+            <div class="kpi-header">
+              <div class="kpi-label-top">Critical Risk MPs</div>
+              <div class="kpi-icon-box red">🚨</div>
+            </div>
+            <div class="kpi-value"><span id="kpi-critical">—</span></div>
+            <div class="kpi-sublabel">Risk score ≥ 75 — Priority action</div>
+            <div class="kpi-change down" aria-label="Immediate action">Action required</div>
+          </div>
+          <div class="kpi-card accent-green" role="region" aria-label="States">
+            <div class="kpi-header">
+              <div class="kpi-label-top">States / UTs Covered</div>
+              <div class="kpi-icon-box green">🗺</div>
+            </div>
+            <div class="kpi-value"><span id="kpi-states">—</span></div>
+            <div class="kpi-sublabel">Pan-India MPLADS coverage</div>
+          </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid-2 mb-5">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot"></span>State-wise Fund Allocation</div>
+              <div class="panel-actions">
+                <span class="badge badge-info">Top 15 States</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-lg"><canvas id="chart-state-alloc" aria-label="State-wise allocation bar chart"></canvas></div>
+            </div>
+          </div>
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:#C0392B"></span>MP Risk Classification</div>
+              <div class="panel-actions">
+                <span class="badge badge-neutral">AI Analysis</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-md" style="height:220px"><canvas id="chart-risk-donut" aria-label="Risk distribution donut chart"></canvas></div>
+              <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-4);flex-wrap:wrap">
+                <div class="flex gap-2 items-center"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#C0392B"></span><span class="text-xs text-secondary">Critical</span></div>
+                <div class="flex gap-2 items-center"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#E67E22"></span><span class="text-xs text-secondary">High</span></div>
+                <div class="flex gap-2 items-center"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#D4AC0D"></span><span class="text-xs text-secondary">Medium</span></div>
+                <div class="flex gap-2 items-center"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#138808"></span><span class="text-xs text-secondary">Low Risk</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid-2 mb-5">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-saffron)"></span>Top MPs by Fund Allocation</div>
+              <div class="panel-actions"><span class="badge badge-neutral">Risk-classified</span></div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-lg"><canvas id="chart-top-mps"></canvas></div>
+            </div>
+          </div>
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-green)"></span>State Risk Summary</div>
+              <div class="panel-actions">
+                <button class="btn btn-secondary btn-xs" onclick="navigate('analytics')">View All →</button>
+              </div>
+            </div>
+            <div class="panel-body no-pad">
+              <div class="data-table-wrap">
+                <table class="data-table" aria-label="State risk summary table">
+                  <thead><tr>
+                    <th>#</th><th>State / UT</th><th>Total Allocation</th>
+                    <th>MPs</th><th>Risk Score</th><th>Level</th>
+                  </tr></thead>
+                  <tbody id="top-states-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="gov-panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-dot" style="background:#C0392B"></span>Recent System Alerts</div>
+            <div class="panel-actions">
+              <button class="btn btn-secondary btn-xs" onclick="navigate('alerts')">View All Alerts →</button>
+              <button class="btn btn-secondary btn-xs" onclick="exportAlertsCSV()">↓ Export</button>
+            </div>
+          </div>
+          <div id="recent-alerts-list"></div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: ANOMALY DETECTION                               -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-anomalies" role="main" aria-label="Anomaly Detection">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">⚠</span>&nbsp;MP Risk &amp; Anomaly Analysis</h2>
+          <div class="section-header-right">
+            <span id="mp-count" class="text-xs text-muted"></span>
+            <button class="btn btn-saffron btn-sm" onclick="exportMPsCSV()">↓ Export Risk Report</button>
+          </div>
+        </div>
+
+        <!-- Explanation banner -->
+        <div style="background:var(--status-info-bg);border:1px solid var(--status-info-bdr);border-radius:var(--r-sm);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-5);font-size:0.78rem;color:var(--status-info-txt)">
+          <strong>ℹ How risk scores are computed:</strong> Each MP is analysed using 5 AI methods — Z-Score (national outlier), IQR Fencing, State-peer deviation, Duplicate amount detection, and Term compliance. A weighted composite score (0–100) determines the risk level.
+        </div>
+
+        <!-- Filters -->
+        <div class="gov-panel mb-5">
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label class="filter-label" for="mp-search">Search:</label>
+              <div class="search-wrap">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="filter-input" id="mp-search" type="search" placeholder="MP name or state…" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="mp-filter-state">State:</label>
+              <select class="filter-select" id="mp-filter-state" aria-label="Filter by state">
+                <option value="all">All States</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="mp-filter-risk">Risk Level:</label>
+              <select class="filter-select" id="mp-filter-risk" aria-label="Filter by risk level">
+                <option value="all">All Levels</option>
+                <option value="critical">Critical (≥75)</option>
+                <option value="high">High (50–74)</option>
+                <option value="medium">Medium (25–49)</option>
+                <option value="low">Low (&lt;25)</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="mp-filter-type">Type:</label>
+              <select class="filter-select" id="mp-filter-type" aria-label="Filter by MP type">
+                <option value="all">All Types</option>
+                <option value="elected">Elected MP</option>
+                <option value="nominated">Nominated MP</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="mp-sort">Sort by:</label>
+              <select class="filter-select" id="mp-sort" aria-label="Sort order">
+                <option value="risk_desc">Highest Risk First</option>
+                <option value="risk_asc">Lowest Risk First</option>
+                <option value="amount_desc">Highest Allocation</option>
+                <option value="amount_asc">Lowest Allocation</option>
+                <option value="name_asc">Name (A–Z)</option>
+              </select>
+            </div>
+            <span class="filter-count" id="mp-count-filter"></span>
+          </div>
+        </div>
+
+        <!-- MP Table -->
+        <div class="gov-panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-dot"></span>Member of Parliament — Risk Register</div>
+            <div class="panel-actions">
+              <span class="badge badge-neutral text-xs">All 773 MPs from official MPLADS records</span>
+            </div>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table" aria-label="MP risk analysis table">
+              <thead>
+                <tr>
+                  <th class="col-sno">#</th>
+                  <th>Member of Parliament</th>
+                  <th>State / UT</th>
+                  <th>Category</th>
+                  <th>Allocated Amount</th>
+                  <th>State Deviation</th>
+                  <th>Risk Score</th>
+                  <th>Risk Level</th>
+                  <th>Anomaly Flags</th>
+                </tr>
+              </thead>
+              <tbody id="mp-table-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" role="navigation" aria-label="Pagination">
+            <div id="mp-pagination" style="display:flex;gap:4px"></div>
+            <span id="mp-page-info" class="page-info"></span>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: STATISTICAL ANALYSIS                            -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-analytics" role="main" aria-label="Statistical Analysis">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">📊</span>&nbsp;Statistical Analysis &amp; Trend Reports</h2>
+          <div class="section-header-right">
+            <button class="btn btn-secondary btn-sm" onclick="exportMPsCSV()">↓ Export Data</button>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-5">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot"></span>Fund Allocation Distribution</div>
+              <span class="badge badge-info">Frequency Histogram</span>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-lg"><canvas id="chart-histogram"></canvas></div>
+            </div>
+          </div>
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-saffron)"></span>Elected vs. Nominated MPs</div>
+              <span class="badge badge-neutral">Comparative Analysis</span>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-lg"><canvas id="chart-elected-nom"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-5">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:#C0392B"></span>Risk Score Distribution</div>
+              <span class="badge badge-neutral">All 773 MPs</span>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-md"><canvas id="chart-risk-dist"></canvas></div>
+            </div>
+          </div>
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-saffron)"></span>State-Level Risk vs. Anomaly Count</div>
+              <span class="badge badge-neutral">Top 12 States</span>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-md"><canvas id="chart-state-risk"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State Rankings Table -->
+        <div class="gov-panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-dot"></span>State/UT Performance Ranking — Fund Utilisation</div>
+            <span class="badge badge-info">Sorted by Total Allocation</span>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table" aria-label="State ranking table">
+              <thead><tr>
+                <th class="col-sno">Rank</th>
+                <th>State / UT</th>
+                <th>Total Allocation</th>
+                <th>Average per MP</th>
+                <th>No. of MPs</th>
+                <th>Anomaly Count</th>
+                <th>Avg. Risk Score</th>
+                <th>Risk Level</th>
+              </tr></thead>
+              <tbody id="state-rank-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: ALERTS & FLAGS                                  -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-alerts" role="main" aria-label="Alerts and Flags">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">🔔</span>&nbsp;Alerts &amp; Compliance Flags</h2>
+          <div class="section-header-right">
+            <span id="alerts-count" class="badge badge-high"></span>
+            <button class="btn btn-secondary btn-sm" onclick="exportAlertsCSV()">↓ Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="gov-panel mb-5">
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label class="filter-label" for="alert-search">Search:</label>
+              <div class="search-wrap">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="filter-input" id="alert-search" type="search" placeholder="Alert title, MP, description…"/>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="alert-filter-severity">Severity:</label>
+              <select class="filter-select" id="alert-filter-severity">
+                <option value="all">All Severities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="alert-filter-type">Alert Type:</label>
+              <select class="filter-select" id="alert-filter-type">
+                <option value="all">All Types</option>
+                <option value="statistical_outlier">Statistical Outlier</option>
+                <option value="peer_deviation">Peer Deviation</option>
+                <option value="duplicate_flag">Duplicate Flag</option>
+                <option value="term_compliance">Term Compliance</option>
+                <option value="cost_overrun">Cost Overrun</option>
+                <option value="stalled_work">Stalled Work</option>
+                <option value="duplicate_work">Duplicate Work</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="alert-filter-state">State:</label>
+              <select class="filter-select" id="alert-filter-state">
+                <option value="all">All States</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="gov-panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-dot" style="background:#C0392B"></span>Alert Register</div>
+            <span class="badge badge-neutral" style="font-size:0.65rem">Sorted by severity — Critical first</span>
+          </div>
+          <div id="alerts-list" role="list" aria-label="Alert list"></div>
+          <div class="pagination-bar" role="navigation" aria-label="Alerts pagination">
+            <div id="alerts-pagination" style="display:flex;gap:4px"></div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: WORKS MONITORING                                -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-works" role="main" aria-label="Works Monitoring">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">🔧</span>&nbsp;MPLADS Works &amp; Payment Compliance Monitoring</h2>
+          <div class="section-header-right">
+            <span class="badge badge-info">PFMS &bull; Asset Geo-Tags &bull; Disbursement Audits</span>
+          </div>
+        </div>
+
+        <!-- Works KPI flags -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);margin-bottom:var(--sp-5)">
+          <div class="works-flag-card" style="border-left:4px solid var(--gov-navy)">
+            <span class="works-flag-icon">🏗</span>
+            <div>
+              <div class="works-flag-count" id="works-total">—</div>
+              <div class="works-flag-label">Total Works Sanctioned</div>
+            </div>
+          </div>
+          <div class="works-flag-card" style="border-left:4px solid #C0392B">
+            <span class="works-flag-icon">💸</span>
+            <div>
+              <div class="works-flag-count" id="works-overruns">—</div>
+              <div class="works-flag-label">Cost Overruns (Exp > 110%)</div>
+            </div>
+          </div>
+          <div class="works-flag-card" style="border-left:4px solid var(--gov-saffron)">
+            <span class="works-flag-icon">⚡</span>
+            <div>
+              <div class="works-flag-count" id="works-payment-gaps">—</div>
+              <div class="works-flag-label">Payment vs Progress Gaps</div>
+            </div>
+          </div>
+          <div class="works-flag-card" style="border-left:4px solid #7B1FA2">
+            <span class="works-flag-icon">🔍</span>
+            <div>
+              <div class="works-flag-count" id="works-unverified">—</div>
+              <div class="works-flag-label">Unverified High-Value Assets</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-5">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot"></span>Works by Execution Status</div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-md"><canvas id="chart-works-status"></canvas></div>
+            </div>
+          </div>
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:#C0392B"></span>Sanctioned vs. Actual Expenditure</div>
+              <span class="badge badge-high" style="font-size:0.62rem">Red = Cost Overrun</span>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap chart-wrap-md"><canvas id="chart-works-financial"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="gov-panel mb-5">
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label class="filter-label" for="works-search">Search:</label>
+              <div class="search-wrap">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input class="filter-input" id="works-search" type="search" placeholder="Work name, ID, MP, contractor…"/>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="works-filter-type">Anomaly Type:</label>
+              <select class="filter-select" id="works-filter-type" aria-label="Filter by anomaly type">
+                <option value="all">All Works</option>
+                <option value="anomalous_only">All Flagged / Anomalous Works</option>
+                <option value="payment_before_progress">Payment Before Progress</option>
+                <option value="rapid_full_payment">Rapid Full Payment</option>
+                <option value="unverified_high_value_asset">Unverified High-Value Asset</option>
+                <option value="cost_overrun">Cost Overrun</option>
+                <option value="stalled_work">Stalled Work</option>
+                <option value="duplicate_work">Duplicate Work</option>
+                <option value="no_progress">No Progress</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="works-filter-state">State:</label>
+              <select class="filter-select" id="works-filter-state" aria-label="Filter by state">
+                <option value="all">All States</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="works-filter-status">Status:</label>
+              <select class="filter-select" id="works-filter-status" aria-label="Filter by status">
+                <option value="all">All Statuses</option>
+                <option value="Sanctioned">Sanctioned</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Stalled">Stalled</option>
+                <option value="Tender Stage">Tender Stage</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="works-sort">Sort by:</label>
+              <select class="filter-select" id="works-sort" aria-label="Sort order">
+                <option value="gap_desc">Largest Payment Gap First (Worst Offenders)</option>
+                <option value="gap_asc">Lowest Payment Gap First</option>
+                <option value="expenditure_desc">Highest Expenditure</option>
+                <option value="sanctioned_desc">Highest Sanctioned Budget</option>
+                <option value="completion_asc">Lowest Progress First</option>
+                <option value="completion_desc">Highest Progress First</option>
+              </select>
+            </div>
+            <span class="filter-count" id="works-count-filter"></span>
+          </div>
+        </div>
+
+        <!-- Flagged & Monitored Works Table -->
+        <div class="gov-panel">
+          <div class="panel-header">
+            <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-saffron)"></span>Works Compliance &amp; Payment Audit Register</div>
+            <div class="panel-actions">
+              <span class="badge badge-neutral text-xs">Click any work row to expand Payment vs Progress Timeline</span>
+            </div>
+          </div>
+          <div class="works-table-wrap">
+            <table class="data-table-compact" aria-label="Works monitoring and compliance table">
+              <thead><tr>
+                <th class="col-w-expander"></th>
+                <th class="col-w-id">Work ID</th>
+                <th class="col-w-desc">Work Description</th>
+                <th class="col-w-state">State</th>
+                <th class="col-w-mp">MP Name</th>
+                <th class="col-w-sanction">Sanctioned Amt.</th>
+                <th class="col-w-exp">Funds Released</th>
+                <th class="col-w-prog">Progress</th>
+                <th class="col-w-gap">Gap %</th>
+                <th class="col-w-flags">Anomaly Flags &amp; Explanations</th>
+              </tr></thead>
+              <tbody id="works-tbody"></tbody>
+            </table>
+          </div>
+          <div class="pagination-bar" role="navigation" aria-label="Works pagination">
+            <div id="works-pagination" style="display:flex;gap:4px"></div>
+            <span id="works-page-info" class="page-info"></span>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: GEOGRAPHIC VIEW                                 -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-map" role="main" aria-label="Geographic View">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">🗺</span>&nbsp;Geographic Intelligence — State-wise View</h2>
+          <span class="badge badge-info">Click a state cell to view its MPs</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--sp-5)">
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot"></span>India — Fund Allocation &amp; Risk Heatmap</div>
+              <div style="display:flex;gap:var(--sp-3);align-items:center;font-size:0.72rem;color:var(--txt-muted)">
+                <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(0,68,170,0.5);border:1px solid rgba(0,68,170,0.6)"></span> Low Risk</span>
+                <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(212,172,13,0.6);border:1px solid rgba(212,172,13,0.8)"></span> Medium</span>
+                <span><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(192,57,43,0.6);border:1px solid rgba(192,57,43,0.8)"></span> High Risk</span>
+              </div>
+            </div>
+            <div class="panel-body" style="position:relative;padding:var(--sp-4)">
+              <div id="india-map" aria-label="India state map heatmap"></div>
+              <div id="map-tooltip" class="map-tooltip" role="tooltip"></div>
+            </div>
+          </div>
+
+          <div class="gov-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span class="panel-title-dot" style="background:var(--gov-green)"></span>State Rankings</div>
+              <span class="badge badge-info">By Allocation</span>
+            </div>
+            <div class="panel-body no-pad" style="overflow-y:auto;max-height:500px">
+              <div class="stats-list" id="map-state-list"></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ════════════════════════════════════════════════════════ -->
+      <!--  PAGE: AI AUDIT REPORT                                 -->
+      <!-- ════════════════════════════════════════════════════════ -->
+      <main class="page-content" id="page-report" role="main" aria-label="AI Audit Report">
+
+        <div class="section-header">
+          <h2><span class="sh-icon">📋</span>&nbsp;AI Audit Report — MPLADS Fund Monitoring</h2>
+          <div class="section-header-right">
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨 Print Report</button>
+            <button class="btn btn-saffron btn-sm" onclick="exportAlertsCSV()">↓ Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Official Report Container -->
+        <div class="gov-panel" style="border-top:4px solid var(--gov-navy)">
+          <div class="panel-body" style="padding:var(--sp-8)">
+
+            <!-- Report Letterhead -->
+            <div style="text-align:center;border-bottom:2px solid var(--gov-navy);padding-bottom:var(--sp-6);margin-bottom:var(--sp-6)">
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--txt-muted);margin-bottom:var(--sp-3)">Smart India Hackathon 2026 • Problem Statement 26102</div>
+              <div style="font-size:1.2rem;font-weight:700;color:var(--gov-navy)">MPALS — MPLADS Anomaly &amp; Lifecycle Surveillance</div>
+              <div style="font-size:0.85rem;color:var(--txt-secondary);margin-top:4px">Student Prototype Decision-Support &amp; Audit Report (MoSPI Scheme Intelligence)</div>
+              <div style="height:3px;background:linear-gradient(to right,var(--gov-saffron),var(--gov-navy),var(--gov-green));margin:var(--sp-4) auto;width:200px;border-radius:2px"></div>
+              <div style="font-size:1rem;font-weight:700;color:var(--txt-primary)">Statistical Anomaly Detection &amp; Priority Triage Report</div>
+              <div style="font-size:0.78rem;color:var(--txt-muted);margin-top:4px">Report Date: <strong id="report-date">Live Evaluation</strong> &bull; Problem Statement ID: 26102 &bull; Smart India Hackathon 2026</div>
+            </div>
+
+            <!-- Summary grid -->
+            <div class="report-section">
+              <h3>Executive Summary</h3>
+              <div class="summary-grid">
+                <div class="summary-cell">
+                  <div class="summary-cell-label">Total MPs Analysed</div>
+                  <div class="summary-cell-value font-mono" id="report-total-mps">773</div>
+                </div>
+                <div class="summary-cell">
+                  <div class="summary-cell-label">Total Funds Monitored</div>
+                  <div class="summary-cell-value text-navy" id="report-total-funds">₹11,681.9 Cr</div>
+                </div>
+                <div class="summary-cell" style="border-top:3px solid #C0392B">
+                  <div class="summary-cell-label">Anomalies Detected</div>
+                  <div class="summary-cell-value" id="report-anomalies" style="color:#C0392B">158</div>
+                </div>
+                <div class="summary-cell" style="border-top:3px solid #C0392B">
+                  <div class="summary-cell-label">Critical Risk Cases</div>
+                  <div class="summary-cell-value" id="report-critical" style="color:#C0392B">12</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Methodology -->
+            <div class="report-section">
+              <h3>Statistical Anomaly Detection Methodology</h3>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--sp-3)">
+                <div class="method-card">
+                  <h4>1. Z-Score Analysis</h4>
+                  <p>National-level statistical outlier detection using Z = (x−μ)/σ. MPs with |Z| &gt; 2 are flagged as allocation anomalies.</p>
+                </div>
+                <div class="method-card">
+                  <h4>2. IQR Fencing</h4>
+                  <p>Interquartile Range method. Values beyond Q3 + 1.5×IQR or below Q1 − 1.5×IQR are flagged as outliers.</p>
+                </div>
+                <div class="method-card">
+                  <h4>3. Peer Benchmark</h4>
+                  <p>State-level peer group comparison. MPs deviating more than 35% from their state mean are reviewed.</p>
+                </div>
+                <div class="method-card">
+                  <h4>4. Milestone Divergence</h4>
+                  <p>Compares PFMS fund releases vs recorded physical milestone completion to catch rapid disbursement before work.</p>
+                </div>
+                <div class="method-card">
+                  <h4>5. Asset Verification</h4>
+                  <p>Tracks field inspection records for high-value completed projects, flagging unverified assets for audit.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Key Findings -->
+            <div class="report-section">
+              <h3>Key Findings</h3>
+              <ul class="findings-list" id="report-findings">
+                <li><span class="fi-icon">▶</span>Analyzing live scheme data…</li>
+              </ul>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="report-section">
+              <h3>Recommendations</h3>
+              <ul class="recs-list" id="report-recommendations">
+                <li>✓ Formulating decision-support recommendations…</li>
+              </ul>
+            </div>
+
+            <!-- Disclaimer -->
+            <div style="margin-top:var(--sp-8);padding:var(--sp-4);background:var(--status-medium-bg);border:1px solid var(--status-medium-bdr);border-radius:var(--r-sm);font-size:0.75rem;color:var(--status-medium-txt)">
+              <strong>Ethical AI &amp; Audit Disclaimer:</strong> This platform is an investigative prioritization and decision-support prototype developed for SIH 2026. Flags and anomaly priority scores represent audit attention signals, NOT judicial findings of fraud or wrongdoing. All highlighted items require human verification by district authorities. MP records are source-derived; work-level ledgers and GPS coordinates are synthetic demonstration scenarios.
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ── GOV FOOTER ── -->
+      <footer class="gov-footer" role="contentinfo">
+        <div>
+          <strong>Smart India Hackathon 2026 Prototype</strong><br/>
+          Problem Statement 26102 — MoSPI MPLADS Fund Intelligence<br/>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">Non-official academic innovation project for audit and monitoring</span>
+        </div>
+        <div>
+          <strong>Platform Architecture</strong><br/>
+          MPALS Anomaly &amp; Surveillance Engine v2.0<br/>
+          Smart India Hackathon 2026 &bull; PS ID: 26102<br/>
+          Decision Support for Ministry, State &amp; District Authorities
+        </div>
+        <div>
+          <strong>Methodology</strong><br/>
+          Statistical Engine: Z-Score &bull; IQR Fencing &bull; Peer Benchmarking<br/>
+          Milestone Divergence &bull; Asset Verification Tracking<br/>
+          Express + TypeScript REST API &bull; SQLite/Postgres
+        </div>
+        <div>
+          <strong>Data Provenance</strong><br/>
+          MP Records: Source-derived official allocation dataset<br/>
+          Works &amp; Ledgers: Simulated demonstration scenarios<br/>
+          Full audit logging &amp; explainable investigation triage
+        </div>
+      </footer>
+
+    </div><!-- /.main-wrapper -->
+  </div><!-- /.app-body -->
+</div><!-- /#app -->
+
+<!-- ══ MODAL: RBAC USER LOGIN & ROLE SWITCHER ═════════════════════════ -->
+<div id="auth-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 id="auth-modal-title">🔐 Role-Based Access Control (RBAC) Switcher</h3>
+      <button class="modal-close-btn" onclick="closeAuthModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.8rem;color:var(--txt-secondary);margin-bottom:var(--sp-4)">
+        Select a pre-configured official role below to test real authorization and jurisdictional data filtering:
+      </p>
+
+      <div class="role-cards-grid" id="rbac-role-cards">
+        <div class="role-card role-ministry" data-email="admin@mospi.gov.in" data-password="Password@123" onclick="selectRoleCard(this, 'admin@mospi.gov.in', 'Password@123')">
+          <div class="role-card-title">🏛️ Ministry Admin</div>
+          <div class="role-card-email">admin@mospi.gov.in</div>
+          <div class="role-card-scope">Scope: National (All 773 MPs)</div>
+        </div>
+        <div class="role-card role-state" data-email="nodal.maharashtra@gov.in" data-password="Password@123" onclick="selectRoleCard(this, 'nodal.maharashtra@gov.in', 'Password@123')">
+          <div class="role-card-title">🏢 State Nodal Officer</div>
+          <div class="role-card-email">nodal.maharashtra@gov.in</div>
+          <div class="role-card-scope">Scope: Maharashtra Only</div>
+        </div>
+        <div class="role-card role-district" data-email="dm.mumbai@nic.in" data-password="Password@123" onclick="selectRoleCard(this, 'dm.mumbai@nic.in', 'Password@123')">
+          <div class="role-card-title">📍 District Collector</div>
+          <div class="role-card-email">dm.mumbai@nic.in</div>
+          <div class="role-card-scope">Scope: Mumbai City District</div>
+        </div>
+        <div class="role-card role-mp" data-email="mp.abhishek@sansad.nic.in" data-password="Password@123" onclick="selectRoleCard(this, 'mp.abhishek@sansad.nic.in', 'Password@123')">
+          <div class="role-card-title">👤 Hon'ble MP</div>
+          <div class="role-card-email">mp.abhishek@sansad.nic.in</div>
+          <div class="role-card-scope">Scope: Personal Constituency</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--bdr-light);padding-top:var(--sp-4);margin-top:var(--sp-3)">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--gov-navy);margin-bottom:8px">Or Sign In with Official Credentials:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+          <div>
+            <label style="font-size:0.7rem;color:var(--txt-muted);display:block;margin-bottom:3px">Email Address</label>
+            <input type="email" id="auth-email-input" class="search-input" style="width:100%" placeholder="officer@gov.in" value="admin@mospi.gov.in"/>
+          </div>
+          <div>
+            <label style="font-size:0.7rem;color:var(--txt-muted);display:block;margin-bottom:3px">Password</label>
+            <input type="password" id="auth-password-input" class="search-input" style="width:100%" placeholder="Password" value="Password@123"/>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <button class="btn btn-neutral" onclick="setPublicViewerMode()">Switch to Public Guest Mode</button>
+          <button class="btn btn-primary" onclick="submitCustomLogin()">Sign In with JWT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: INVESTIGATION WORKSPACE ═════════════════════════════════ -->
+<div id="investigation-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="iw-modal-title">
+  <div class="modal-dialog modal-dialog-large">
+    <div class="modal-header">
+      <h3 id="iw-modal-title">🔍 Investigation Workspace — Case Details</h3>
+      <button class="modal-close-btn" onclick="closeInvestigationModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="investigation-modal-body">
+      <!-- Injected dynamically via openInvestigationModal -->
+    </div>
+    <div class="modal-footer" id="investigation-modal-footer">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/ai-engine.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/map.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Set datetime
+  (function() {
+    const now = new Date();
+    const opts = { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' };
+    const str = now.toLocaleString('en-IN', opts);
+    const luEl = document.getElementById('last-updated');
+    const dtEl = document.getElementById('topbar-datetime');
+    if (luEl) luEl.textContent = now.toLocaleDateString('en-IN', { day:'2-digit', month:'long', year:'numeric' });
+    if (dtEl) dtEl.textContent = str;
+  })();
+
+  // Update nav badges after init
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      if (window.App && App.results) {
+        const nb1 = document.getElementById('nav-badge-anomalies');
+        const nb2 = document.getElementById('nav-badge-alerts');
+        if (nb1) nb1.textContent = App.results.summary.anomalies_detected;
+        if (nb2) nb2.textContent = App.results.summary.total_alerts;
+      }
+    }, 600);
+  });
+
+  // Update topbar title/breadcrumb on nav
+  const PAGE_TITLES = {
+    dashboard: 'Executive Dashboard',
+    anomalies: 'MP Anomaly Detection',
+    analytics:  'Statistical Analysis',
+    alerts:     'Alerts & Flags',
+    works:      'Works Monitoring',
+    map:        'Geographic View',
+    report:     'AI Audit Report'
+  };
+  document.querySelectorAll('.nav-item[data-page]').forEach(el => {
+    el.addEventListener('click', () => {
+      const pg = el.dataset.page;
+      const titleEl = document.getElementById('topbar-page-title');
+      const crumb   = document.getElementById('topbar-breadcrumb-current');
+      if (titleEl) titleEl.textContent = PAGE_TITLES[pg] || pg;
+      if (crumb)   crumb.textContent   = PAGE_TITLES[pg] || pg;
+    });
+  });
+</script>
+
+</body>
+</html>

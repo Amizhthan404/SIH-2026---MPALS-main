@@ -1,0 +1,122 @@
+/* ============================================================
+   MPLADS AI Platform — Animations (Gov-appropriate, subtle)
+   ============================================================ */
+
+/* Page fade in */
+.page-content.active {
+  animation: pageReveal 0.2s ease both;
+}
+@keyframes pageReveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger children */
+.stagger-in > * {
+  animation: staggerUp 0.3s ease both;
+}
+.stagger-in > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger-in > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger-in > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger-in > *:nth-child(8) { animation-delay: 0.32s; }
+@keyframes staggerUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Table row reveal */
+.data-table tbody tr {
+  animation: rowIn 0.2s ease both;
+}
+
+@keyframes rowIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Risk bar fill */
+@keyframes fillBar {
+  from { width: 0%; }
+}
+.risk-bar-fill { animation: fillBar 0.7s ease both; }
+
+/* Progress bar fill */
+@keyframes fillProgress {
+  from { width: 0%; }
+}
+.progress-fill { animation: fillProgress 1s cubic-bezier(.4,0,.2,1) both; }
+
+/* Live dot blink */
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* Ticker */
+@keyframes tickerScroll {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Welcome animations already defined in main.css */
+
+/* Skeleton shimmer for loading */
+.skeleton {
+  background: linear-gradient(90deg, #e8edf2 25%, #d8dfe8 50%, #e8edf2 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Button active feedback */
+.btn:active { transform: translateY(1px); }
+
+/* Nav item hover transition handled in CSS */
+.nav-item { transition: background 0.1s ease, color 0.1s ease; }
+
+/* Panel hover lift — very subtle */
+.gov-panel {
+  transition: box-shadow 0.2s ease;
+}
+
+/* Spinner for loading states */
+.spinner {
+  width: 24px; height: 24px;
+  border: 3px solid #DEE2E6;
+  border-top-color: var(--gov-navy);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* KPI card hover */
+.kpi-card {
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.kpi-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Alert item hover */
+.alert-item { transition: background 0.1s ease; }
+
+/* Stats item hover */
+.stats-item { transition: background 0.1s ease; }
+
+/* Toast slide */
+.toast { transition: transform 0.3s cubic-bezier(.175,.885,.32,1.275); }
+
+/* Map state hover */
+.map-state {
+  transition: filter 0.15s ease;
+  cursor: pointer;
+}
+.map-state:hover { filter: brightness(0.85); }
