@@ -73,6 +73,18 @@ function hideCheatsheetTab() {
   if (drawer) drawer.style.display = 'none';
 }
 
+function showCheatsheetTab() {
+  const tab = document.getElementById('cheatsheet-pull-tab');
+  const drawer = document.getElementById('cheatsheet-drawer');
+  if (tab) tab.style.display = '';
+  if (drawer) {
+    drawer.style.display = '';
+    drawer.classList.remove('open');
+  }
+  const arrow = document.getElementById('cheatsheet-tab-arrow');
+  if (arrow) arrow.style.transform = '';
+}
+
 
 // ── Router ─────────────────────────────────────────────────────────────
 function navigate(page) {
@@ -1039,8 +1051,8 @@ function updateAuthUI() {
     if (roleBtnIcon) roleBtnIcon.textContent = roleEmoji;
     roleBtnText.textContent = `${user.name} (${user.role}${user.scope_id && user.scope_id !== 'ALL' ? ': ' + user.scope_id : ''})`;
   } else {
-    if (roleBtnIcon) roleBtnIcon.textContent = '👤';
-    roleBtnText.textContent = 'Public Viewer (Demo)';
+    if (roleBtnIcon) roleBtnIcon.textContent = '🔒';
+    roleBtnText.textContent = 'Official Sign In Required';
   }
 }
 
@@ -1104,11 +1116,7 @@ async function submitCustomLogin() {
 }
 
 async function setPublicViewerMode() {
-  ApiClient.logout();
-  closeAuthModal();
-  updateAuthUI();
-  showToast('Switched to Public Viewer mode (unauthenticated)', 'info');
-  await reloadDataset();
+  signOutToLandingPage();
 }
 
 // ── Landing Login Gateway Handlers ─────────────────────────────────────
@@ -1139,6 +1147,8 @@ async function submitLandingLogin() {
     const result = await ApiClient.login(email, password);
     const landing = document.getElementById('login-landing-page');
     if (landing) landing.classList.add('hidden');
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.classList.remove('auth-hidden');
     hideCheatsheetTab();
     updateAuthUI();
     showToast(`✅ Welcome ${result.user.name}! Authenticated as ${result.user.role}`, 'success');
@@ -1159,30 +1169,26 @@ async function submitLandingLogin() {
 async function autoFillLandingRole(email, password) {
   const emailInput = document.getElementById('landing-email');
   const passInput = document.getElementById('landing-password');
+  const captchaDisplay = document.getElementById('landing-captcha-display')?.textContent.trim();
+  const captchaInput   = document.getElementById('landing-captcha-input');
   if (emailInput) emailInput.value = email;
   if (passInput) passInput.value = password;
+  if (captchaInput && captchaDisplay) captchaInput.value = captchaDisplay;
   await submitLandingLogin();
-}
-
-async function enterPublicGuestModeLanding() {
-  ApiClient.logout();
-  const landing = document.getElementById('login-landing-page');
-  if (landing) landing.classList.add('hidden');
-  hideCheatsheetTab();
-  updateAuthUI();
-  showToast('Entered Public Viewer mode (Demo)', 'info');
-  await reloadDataset();
 }
 
 function signOutToLandingPage() {
   ApiClient.logout();
   const landing = document.getElementById('login-landing-page');
   if (landing) landing.classList.remove('hidden');
-  // Show cheat-sheet tab again on sign-out
-  const tab = document.getElementById('cheatsheet-pull-tab');
-  const drawer = document.getElementById('cheatsheet-drawer');
-  if (tab) tab.style.display = '';
-  if (drawer) { drawer.style.display = ''; drawer.classList.remove('open'); }
+  const appEl = document.getElementById('app');
+  if (appEl) appEl.classList.add('auth-hidden');
+  showCheatsheetTab();
+  refreshCaptcha();
+  const emailInput = document.getElementById('landing-email');
+  const passInput = document.getElementById('landing-password');
+  if (emailInput) emailInput.value = '';
+  if (passInput) passInput.value = '';
   updateAuthUI();
   showToast('Signed out. Portal session locked.', 'info');
 }
@@ -1192,7 +1198,7 @@ function refreshCaptcha() {
   const display = document.getElementById('landing-captcha-display');
   const input = document.getElementById('landing-captcha-input');
   if (display) display.textContent = code;
-  if (input) input.value = code;
+  if (input) input.value = '';
 }
 
 async function reloadDataset() {
@@ -1412,8 +1418,22 @@ async function updateAlertInvestigationStatus(alertId, newStatus) {
 
 // ── Init ───────────────────────────────────────────────────────────────
 async function init() {
-  // Check auth session
-  updateAuthUI();
+  // Check auth session & gate UI
+  const isAuth = ApiClient.isAuthenticated();
+  const landing = document.getElementById('login-landing-page');
+  const appEl = document.getElementById('app');
+
+  if (isAuth) {
+    if (landing) landing.classList.add('hidden');
+    if (appEl) appEl.classList.remove('auth-hidden');
+    hideCheatsheetTab();
+    updateAuthUI();
+  } else {
+    if (landing) landing.classList.remove('hidden');
+    if (appEl) appEl.classList.add('auth-hidden');
+    showCheatsheetTab();
+    updateAuthUI();
+  }
 
   try {
     // Attempt to load from REST API backend

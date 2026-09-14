@@ -14,8 +14,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/main.css?v=2.1"/>
-  <link rel="stylesheet" href="css/animations.css?v=2.1"/>
+  <link rel="stylesheet" href="css/main.css?v=2.2"/>
+  <link rel="stylesheet" href="css/animations.css?v=2.2"/>
 
   <!-- Leaflet Real Interactive Map Engine -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
@@ -260,6 +260,8 @@
   <span>Login</span>
 </div>
 
+</div><!-- end #login-landing-page -->
+
 <!-- ══ WELCOME SCREEN ═════════════════════════════════════════════════ -->
 <div id="welcome-overlay" class="welcome-overlay">
   <div class="welcome-emblem">🇮🇳</div>
@@ -278,7 +280,7 @@
 <div id="toast-container" class="toast-container"></div>
 
 <!-- ══ APP SHELL ══════════════════════════════════════════════════════ -->
-<div id="app">
+<div id="app" class="auth-hidden">
 
   <!-- ── TRICOLOR STRIP WITH ASHOKA CHAKRA ── -->
   <div class="gov-tricolor" role="presentation">
@@ -326,7 +328,7 @@
       <span class="infobar-sep">|</span>
       <button id="btn-auth-role" class="auth-role-btn" onclick="openAuthModal()" title="Switch authenticated user role or sign in">
         <span id="auth-role-icon">👤</span>
-        <span id="auth-role-text">Public Viewer (Demo)</span> ▾
+        <span id="auth-role-text">Official Authentication Required</span> ▾
       </button>
       <button class="btn btn-secondary btn-xs" onclick="signOutToLandingPage()" title="Lock session & return to Official Gateway">🔒 Sign Out</button>
     </div>
@@ -1274,7 +1276,7 @@
           </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <button class="btn btn-neutral" onclick="setPublicViewerMode()">Switch to Public Guest Mode</button>
+          <button class="btn btn-secondary" onclick="closeAuthModal(); signOutToLandingPage();">🔒 Lock Session &amp; Sign Out</button>
           <button class="btn btn-primary" onclick="submitCustomLogin()">Sign In with JWT</button>
         </div>
       </div>
@@ -1299,11 +1301,11 @@
 </div>
 
 <!-- Scripts -->
-<script src="js/data.js"></script>
-<script src="js/ai-engine.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/map.js"></script>
-<script src="js/app.js"></script>
+<script src="js/data.js?v=2.2"></script>
+<script src="js/ai-engine.js?v=2.2"></script>
+<script src="js/charts.js?v=2.2"></script>
+<script src="js/map.js?v=2.2"></script>
+<script src="js/app.js?v=2.2"></script>
 
 <script>
   // Set datetime

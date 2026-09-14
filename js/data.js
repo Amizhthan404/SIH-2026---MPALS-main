@@ -95,6 +95,10 @@ const ApiClient = (() => {
       setSession(null, null);
     },
 
+    isAuthenticated() {
+      return !!getToken() && !!getCurrentUser();
+    },
+
     async getMe() {
       const res = await request('/auth/me');
       return res.data;
