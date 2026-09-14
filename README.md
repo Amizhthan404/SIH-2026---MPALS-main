@@ -113,17 +113,7 @@ Access the platform in your browser at:
 
 ---
 
-## ⏱️ 3-Minute Hackathon Presentation / Demo Script
 
-| Timestamp | Screen / Action | What to Say / Point Out to Judges |
-|---|---|---|
-| **0:00 – 0:30** | **Top Info Bar & Provenance** | *"Welcome, respected jury members. This is Sanchi, developed for MoSPI Problem Statement 26102. Notice our top bar: we clearly label data provenance—our 773 MPs are derived from official MPLADS allocation records, while works and ledgers model real PFMS transactions."* |
-| **0:30 – 1:00** | **Executive Dashboard & Statistical Rigor** | *"Instead of claiming an untrainable 'black box ML' model, Sanchi uses explainable statistical surveillance: parametric Z-score, IQR fencing, cohort peer variance, and milestone divergence. Notice our live KPIs: total MPs, fund allocations, and risk distributions computed directly from SQLite."* |
-| **1:00 – 1:45** | **Works Monitoring & Payment vs. Progress** | *Click 'Works Monitoring'. Filter by 'Payment Gaps'. Click a flagged work.*<br/>*"Here is our milestone surveillance: we track cumulative financial releases against physical ground completion. Notice this project where 90% of funds were disbursed while physical progress is only 15%—a classic pre-execution risk."* |
-| **1:45 – 2:30** | **Alerts & Investigation Workspace** | *Click 'Alerts & Flags'. Click 'Investigate 🔍' on a Critical alert.*<br/>*"Every alert opens our Investigation Workspace. It doesn't just show an error—it gives an explainable breakdown of why it was flagged, the numerical deviation, and the audit trail. In guest mode, triage is locked."* |
-| **2:30 – 3:00** | **Role Switcher & RBAC Scoping** | *Click the top-right Role button. Select 'State Nodal Officer (Maharashtra)'.*<br/>*"With one click, we sign in using real JWT and bcrypt authentication. Notice how the entire dashboard instantly re-scopes to Maharashtra only. The officer can now triage the alert and mark it 'Under Review' or 'Resolved', recording their official identity in the audit log."* |
-
----
 
 ## 📁 Repository Structure
 
