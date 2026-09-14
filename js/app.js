@@ -72,16 +72,19 @@ function hideCheatsheetTab() {
   if (tab) tab.style.display = 'none';
   if (drawer) drawer.style.display = 'none';
 }
-
+// Show cheat-sheet tab when on login page
 function showCheatsheetTab() {
   const tab = document.getElementById('cheatsheet-pull-tab');
   const drawer = document.getElementById('cheatsheet-drawer');
-  if (tab) tab.style.display = '';
+  const arrow = document.getElementById('cheatsheet-tab-arrow');
+  if (tab) {
+    tab.style.display = 'flex';
+    tab.classList.remove('open');
+  }
   if (drawer) {
     drawer.style.display = '';
     drawer.classList.remove('open');
   }
-  const arrow = document.getElementById('cheatsheet-tab-arrow');
   if (arrow) arrow.style.transform = '';
 }
 
@@ -1051,8 +1054,8 @@ function updateAuthUI() {
     if (roleBtnIcon) roleBtnIcon.textContent = roleEmoji;
     roleBtnText.textContent = `${user.name} (${user.role}${user.scope_id && user.scope_id !== 'ALL' ? ': ' + user.scope_id : ''})`;
   } else {
-    if (roleBtnIcon) roleBtnIcon.textContent = '🔒';
-    roleBtnText.textContent = 'Official Sign In Required';
+    if (roleBtnIcon) roleBtnIcon.textContent = '👤';
+    roleBtnText.textContent = 'Public Viewer (Demo)';
   }
 }
 
@@ -1116,7 +1119,11 @@ async function submitCustomLogin() {
 }
 
 async function setPublicViewerMode() {
-  signOutToLandingPage();
+  ApiClient.logout();
+  closeAuthModal();
+  updateAuthUI();
+  showToast('Switched to Public Viewer mode (unauthenticated)', 'info');
+  await reloadDataset();
 }
 
 // ── Landing Login Gateway Handlers ─────────────────────────────────────
@@ -1132,7 +1139,7 @@ async function submitLandingLogin() {
   }
   // Validate CAPTCHA
   if (!captchaInput || captchaInput !== (captchaDisplay || '').toUpperCase()) {
-    showToast('⛔ CAPTCHA verification failed — please try again.', 'high');
+    showToast('⛔ CAPTCHA verification failed — please re-enter code.', 'high');
     refreshCaptcha();
     const captchaBox = document.querySelector('.login-captcha-box');
     if (captchaBox) {
@@ -1145,10 +1152,11 @@ async function submitLandingLogin() {
   try {
     showToast('🔐 Authenticating with official MoSPI gateway...', 'info');
     const result = await ApiClient.login(email, password);
+    sessionStorage.setItem('Sanchi_session_active', 'true');
     const landing = document.getElementById('login-landing-page');
     if (landing) landing.classList.add('hidden');
-    const appEl = document.getElementById('app');
-    if (appEl) appEl.classList.remove('auth-hidden');
+    const app = document.getElementById('app');
+    if (app) app.style.display = 'block';
     hideCheatsheetTab();
     updateAuthUI();
     showToast(`✅ Welcome ${result.user.name}! Authenticated as ${result.user.role}`, 'success');
@@ -1165,30 +1173,53 @@ async function submitLandingLogin() {
   }
 }
 
-
 async function autoFillLandingRole(email, password) {
   const emailInput = document.getElementById('landing-email');
   const passInput = document.getElementById('landing-password');
   const captchaDisplay = document.getElementById('landing-captcha-display')?.textContent.trim();
-  const captchaInput   = document.getElementById('landing-captcha-input');
+  const captchaInput = document.getElementById('landing-captcha-input');
+
   if (emailInput) emailInput.value = email;
   if (passInput) passInput.value = password;
   if (captchaInput && captchaDisplay) captchaInput.value = captchaDisplay;
+
+  // Auto-close cheatsheet drawer
+  const drawer = document.getElementById('cheatsheet-drawer');
+  const tab = document.getElementById('cheatsheet-pull-tab');
+  const arrow = document.getElementById('cheatsheet-tab-arrow');
+  if (drawer) drawer.classList.remove('open');
+  if (tab) tab.classList.remove('open');
+  if (arrow) arrow.style.transform = '';
+
   await submitLandingLogin();
 }
 
+function fillCaptchaFromDisplay() {
+  const display = document.getElementById('landing-captcha-display');
+  const input = document.getElementById('landing-captcha-input');
+  if (display && input) {
+    input.value = display.textContent.trim();
+  }
+}
+
 function signOutToLandingPage() {
+  sessionStorage.removeItem('Sanchi_session_active');
   ApiClient.logout();
   const landing = document.getElementById('login-landing-page');
   if (landing) landing.classList.remove('hidden');
-  const appEl = document.getElementById('app');
-  if (appEl) appEl.classList.add('auth-hidden');
-  showCheatsheetTab();
-  refreshCaptcha();
+  const app = document.getElementById('app');
+  if (app) app.style.display = 'none';
+
+  // Clear fields
   const emailInput = document.getElementById('landing-email');
   const passInput = document.getElementById('landing-password');
+  const captchaInput = document.getElementById('landing-captcha-input');
   if (emailInput) emailInput.value = '';
   if (passInput) passInput.value = '';
+  if (captchaInput) captchaInput.value = '';
+
+  showCheatsheetTab();
+  refreshCaptcha();
   updateAuthUI();
   showToast('Signed out. Portal session locked.', 'info');
 }
@@ -1418,22 +1449,24 @@ async function updateAlertInvestigationStatus(alertId, newStatus) {
 
 // ── Init ───────────────────────────────────────────────────────────────
 async function init() {
-  // Check auth session & gate UI
-  const isAuth = ApiClient.isAuthenticated();
+  const isSessionActive = sessionStorage.getItem('Sanchi_session_active') === 'true';
+  const user = ApiClient.getCurrentUser();
   const landing = document.getElementById('login-landing-page');
-  const appEl = document.getElementById('app');
+  const app = document.getElementById('app');
 
-  if (isAuth) {
+  if (isSessionActive && user) {
     if (landing) landing.classList.add('hidden');
-    if (appEl) appEl.classList.remove('auth-hidden');
+    if (app) app.style.display = 'block';
     hideCheatsheetTab();
-    updateAuthUI();
   } else {
     if (landing) landing.classList.remove('hidden');
-    if (appEl) appEl.classList.add('auth-hidden');
+    if (app) app.style.display = 'none';
     showCheatsheetTab();
-    updateAuthUI();
+    refreshCaptcha();
   }
+
+  // Check auth session
+  updateAuthUI();
 
   try {
     // Attempt to load from REST API backend
