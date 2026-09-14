@@ -1854,13 +1854,71 @@ a:hover { text-decoration: underline; }
 }
 .login-body-grid {
   flex: 1;
-  max-width: 1100px;
+  max-width: 520px;
   width: 92%;
-  margin: 24px auto;
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 28px;
-  align-items: start;
+  margin: 32px auto;
+  display: block;
+}
+
+/* ── CHEAT-SHEET SLIDE-OUT DRAWER ── */
+.cheatsheet-drawer {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) translateX(100%);
+  width: 320px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: rgba(0, 26, 60, 0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  padding: 20px 18px 20px 20px;
+  z-index: 100001;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -6px 0 32px rgba(0,0,0,0.5);
+}
+.cheatsheet-drawer.open {
+  transform: translateY(-50%) translateX(0);
+}
+.cheatsheet-pull-tab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 28px;
+  background: rgba(255,198,0,0.92);
+  color: #001A35;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 6px;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  z-index: 100002;
+  box-shadow: -3px 0 12px rgba(0,0,0,0.35);
+  transition: width 0.2s, background 0.2s;
+  user-select: none;
+}
+.cheatsheet-pull-tab:hover {
+  width: 32px;
+  background: rgba(255,198,0,1);
+}
+.cheatsheet-pull-tab .tab-arrow {
+  font-size: 0.75rem;
+  transition: transform 0.35s;
+}
+.cheatsheet-drawer.open ~ .cheatsheet-pull-tab .tab-arrow,
+.cheatsheet-pull-tab.open .tab-arrow {
+  transform: rotate(180deg);
 }
 .login-sec-card {
   background: rgba(255, 255, 255, 0.98);
@@ -1942,36 +2000,37 @@ a:hover { text-decoration: underline; }
 }
 
 .login-roles-hint-panel {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--r-md);
-  padding: 24px;
+  /* Styles now live inside .cheatsheet-drawer — kept for compatibility */
 }
 .login-roles-hint-title {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #FFF;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .login-roles-hint-sub {
-  font-size: 0.74rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 16px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 14px;
+  line-height: 1.4;
 }
 .login-role-demo-card {
   background: rgba(255, 255, 255, 0.95);
   color: var(--txt-primary);
   border-radius: 6px;
-  padding: 10px 14px;
-  margin-bottom: 10px;
+  padding: 9px 12px;
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   transition: transform 0.2s;
 }
 .login-role-demo-card:hover {
-  transform: translateX(4px);
+  transform: translateX(-3px);
 }
 
 /* ── REAL LEAFLET INDIA MAP STYLING ── */

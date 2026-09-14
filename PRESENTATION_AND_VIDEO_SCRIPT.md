@@ -1,6 +1,6 @@
 # 🇮🇳 Sanchi — Smart India Hackathon 2026
 ## 5-Part Video Presentation Script
-### Problem Statement ID: SIH1770 | MoSPI (Ministry of Statistics and Programme Implementation)
+### Problem Statement ID: SIH26102 | MoSPI (Ministry of Statistics and Programme Implementation)
 **Project Name:** Sanchi — MPLADS Anomaly & Lifecycle Surveillance Intelligence
 **Live Demo URL:** https://sih-2026-mpals-main.onrender.com/
 **Target Duration:** 4:30 – 5:00 Minutes
@@ -62,9 +62,9 @@ The audit is always retrospective. The damage is already done."
 
 "MoSPI identified this exact gap as a national-level priority.
 
-Their problem statement — SIH1770 — asks this question:
+Their problem statement — **SIH26102** — is titled:
 
-'Can we build an AI-driven, real-time anomaly detection and surveillance system that monitors MPLADS fund flow, project lifecycle, and district-level compliance — proactively, before the audit?'
+'Development of an AI-powered system to detect anomalies, fraud, and inefficiencies in MPLAD Scheme implementation.'
 
 That is the problem we chose. And we built Sanchi."
 
@@ -297,9 +297,12 @@ Smart India Hackathon 2026. We are ready."
 | Live Prototype | https://sih-2026-mpals-main.onrender.com/ |
 | GitHub Repository | https://github.com/Amizhthan404/SIH-2026---MPALS-main |
 | MoSPI MPLADS Portal | https://mplads.gov.in/ |
-| Problem Statement | SIH1770 — Ministry of Statistics and Programme Implementation |
+| **PS Number** | **SIH26102** |
+| Organization | MoSPI — Ministry of Statistics & Programme Implementation |
+| Category | Software · Theme: Smart Automation |
+| Submission Deadline | 30 September 2026 |
 | PFMS Integration Target | https://pfms.nic.in/ |
 
 ---
 
-Script Version 2.0 — Sanchi Rebrand — SIH 2026
+Script Version 2.1 — PS SIH26102 Verified — Sanchi Rebrand — SIH 2026

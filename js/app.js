@@ -54,6 +54,26 @@ function toggleMobileSidebar(force) {
   }
 }
 
+// ── Cheat-Sheet Slide-Out Drawer ───────────────────────────────────
+function toggleCheatsheet() {
+  const drawer = document.getElementById('cheatsheet-drawer');
+  const tab    = document.getElementById('cheatsheet-pull-tab');
+  const arrow  = document.getElementById('cheatsheet-tab-arrow');
+  if (!drawer) return;
+  const isOpen = drawer.classList.contains('open');
+  drawer.classList.toggle('open', !isOpen);
+  tab.classList.toggle('open', !isOpen);
+  if (arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+// Hide cheat-sheet tab when login page is hidden
+function hideCheatsheetTab() {
+  const tab = document.getElementById('cheatsheet-pull-tab');
+  const drawer = document.getElementById('cheatsheet-drawer');
+  if (tab) tab.style.display = 'none';
+  if (drawer) drawer.style.display = 'none';
+}
+
+
 // ── Router ─────────────────────────────────────────────────────────────
 function navigate(page) {
   toggleMobileSidebar(false);
@@ -1104,6 +1124,7 @@ async function submitLandingLogin() {
     const result = await ApiClient.login(email, password);
     const landing = document.getElementById('login-landing-page');
     if (landing) landing.classList.add('hidden');
+    hideCheatsheetTab();
     updateAuthUI();
     showToast(`Welcome ${result.user.name}! Authenticated as ${result.user.role}`, 'success');
     await reloadDataset();
@@ -1124,6 +1145,7 @@ async function enterPublicGuestModeLanding() {
   ApiClient.logout();
   const landing = document.getElementById('login-landing-page');
   if (landing) landing.classList.add('hidden');
+  hideCheatsheetTab();
   updateAuthUI();
   showToast('Entered Public Viewer mode (Demo)', 'info');
   await reloadDataset();
@@ -1133,12 +1155,17 @@ function signOutToLandingPage() {
   ApiClient.logout();
   const landing = document.getElementById('login-landing-page');
   if (landing) landing.classList.remove('hidden');
+  // Show cheat-sheet tab again on sign-out
+  const tab = document.getElementById('cheatsheet-pull-tab');
+  const drawer = document.getElementById('cheatsheet-drawer');
+  if (tab) tab.style.display = '';
+  if (drawer) { drawer.style.display = ''; drawer.classList.remove('open'); }
   updateAuthUI();
   showToast('Signed out. Portal session locked.', 'info');
 }
 
 function refreshCaptcha() {
-  const code = 'MPLADS-' + Math.floor(10000 + Math.random() * 90000);
+  const code = 'SANCHI-' + Math.floor(10000 + Math.random() * 90000);
   const display = document.getElementById('landing-captcha-display');
   const input = document.getElementById('landing-captcha-input');
   if (display) display.textContent = code;

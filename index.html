@@ -191,11 +191,12 @@
         <button class="btn btn-link" onclick="enterPublicGuestModeLanding()" style="font-size:0.78rem">Continue as Public Viewer (Unauthenticated Demo Mode) →</button>
       </div>
     </div>
+  </div><!-- end .login-body-grid -->
 
-    <!-- Right: Pre-configured Official Roles Cheat-Sheet -->
-    <div class="login-roles-hint-panel">
-      <div class="login-roles-hint-title">⚡ Official Test Authority Cheat-Sheet</div>
-      <div class="login-roles-hint-sub">Select any pre-configured official role below to 1-click auto fill credentials & test real authorization:</div>
+<!-- ╺─ CHEAT-SHEET SLIDE-OUT DRAWER (outside login grid) ─╾ -->
+<div class="cheatsheet-drawer" id="cheatsheet-drawer">
+  <div class="login-roles-hint-title">⚡ Official Test Authority Cheat-Sheet</div>
+  <div class="login-roles-hint-sub">Select any pre-configured official role below to 1-click auto fill credentials &amp; test real authorization:</div>
 
       <div class="login-role-demo-card">
         <div>
@@ -233,11 +234,16 @@
         <button class="btn btn-primary btn-xs" onclick="autoFillLandingRole('mp.abhishek@sansad.nic.in', 'Password@123')">Auto Sign In</button>
       </div>
 
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.6);margin-top:12px;line-height:1.4">
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);margin-top:12px;line-height:1.5">
         ℹ️ <strong>Judicial Audit Notice:</strong> Password hints are provided for evaluator testing during Smart India Hackathon 2026 evaluation.
       </div>
-    </div>
-  </div>
+  </div><!-- end cheatsheet-drawer -->
+
+<!-- Pull tab — always visible on right edge -->
+<div class="cheatsheet-pull-tab" id="cheatsheet-pull-tab" onclick="toggleCheatsheet()" role="button" aria-label="Toggle test credentials panel">
+  <span class="tab-arrow" id="cheatsheet-tab-arrow">❮</span>
+  <span>Test</span>
+  <span>Login</span>
 </div>
 
 <!-- ══ WELCOME SCREEN ═════════════════════════════════════════════════ -->
