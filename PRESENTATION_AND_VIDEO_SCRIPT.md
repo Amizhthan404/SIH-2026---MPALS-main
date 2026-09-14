@@ -1,165 +1,305 @@
-# 🇮🇳 MPALS — Smart India Hackathon 2026
-## 4 to 5-Minute Screen Recording & Presentation Script
-### Problem Statement ID: 26102 | MoSPI (Ministry of Statistics and Programme Implementation)
-**Project Name:** MPALS — MPLADS Anomaly & Lifecycle Surveillance  
-**Live Demo URL:** [https://sih-2026-mpals-main.onrender.com/](https://sih-2026-mpals-main.onrender.com/)  
-**Target Video Duration:** 4:30 to 5:00 Minutes  
-**Tone:** Confident, Authoritative, Technologically Rigorous, and Impact-Driven  
+# 🇮🇳 Sanchi — Smart India Hackathon 2026
+## 5-Part Video Presentation Script
+### Problem Statement ID: SIH1770 | MoSPI (Ministry of Statistics and Programme Implementation)
+**Project Name:** Sanchi — MPLADS Anomaly & Lifecycle Surveillance Intelligence
+**Live Demo URL:** https://sih-2026-mpals-main.onrender.com/
+**Target Duration:** 4:30 – 5:00 Minutes
+**Tone:** Confident · Authoritative · Technically Rigorous · Mission-Driven
 
 ---
 
-## 🎬 Video Recording Blueprint Overview
+## 🎬 Video Blueprint
 
-| Section | Timestamp | Screen Focus | Primary Objective |
-| :--- | :--- | :--- | :--- |
-| **1. Hook & Real Problem** | `0:00 – 0:50` | Title Slide / MoSPI Portal context | Expose the gap between data entry and real audit surveillance |
-| **2. Problem Statement Deep-Dive** | `0:50 – 1:35` | Official Problem Statement (PS 26102) | Prove deep domain knowledge of MPLADS scheme bottlenecks |
-| **3. System Architecture & AI Reality** | `1:35 – 2:15` | Dual-engine architecture diagram | Defensible 5-vector statistical anomaly engine (no fake AI claims) |
-| **4. Live Prototype Walkthrough** | `2:15 – 4:00` | Live Render Deployment walkthrough | High-octane demonstration of Gateway, Dashboard, AI Engine & GIS Map |
-| **5. Scalability & National Impact** | `4:00 – 4:35` | Architecture / Reports / Integration | Zero-disruption integration with e-SAKSHI & PFMS |
-| **6. The Final Punch & Closing** | `4:35 – 5:00` | Live Dashboard overview | Unforgettable closing on transparency in public governance |
-
----
-
-## 🎙️ Comprehensive Word-for-Word Video Script
+| Part | Timestamp | Focus | Goal |
+|:---|:---|:---|:---|
+| **1. The Problem** | `0:00 – 0:55` | MoSPI portal / data screenshot | Make the judge FEEL the problem |
+| **2. The Solution** | `0:55 – 1:40` | Solution diagram / feature list | Prove we solved it the right way |
+| **3. Our System** | `1:40 – 2:20` | Architecture + tech stack | Show technical depth |
+| **4. Prototype Tour** | `2:20 – 4:10` | Live site walkthrough | Demonstrate real working product |
+| **5. The Close** | `4:10 – 4:45` | Final dashboard + logo outro | Land with impact |
 
 ---
 
-### **SECTION 1: THE HOOK & THE REAL PROBLEM (0:00 – 0:50)**
+---
 
-#### 🖥️ **What to Show on Screen:**
-- Start at the official login landing screen of `https://sih-2026-mpals-main.onrender.com/`.
-- Show the national emblem, the Ashoka Chakra tricolor strip, and the subtitle: *"MPLADS Anomaly & Lifecycle Surveillance — Problem Statement 26102"*.
-
-#### 🗣️ **Voiceover (Read word-for-word with high energy):**
-> "Every single year, the Government of India entrusts over **₹3,900 Crores** of taxpayers' money to our Hon'ble Members of Parliament under the MPLADS scheme — totaling more than **₹11,600 Crores** across an active parliamentary cycle. 
-> 
-> But here is the harsh reality that every audit body and vigilance officer faces:
-> The current government portal, e-SAKSHI, is purely a **passive data-entry repository**. It collects records, but it does **not** think. It records payments, but it does **not** detect fraud.
-> 
-> Across 773 MPs, 36 States, and tens of thousands of localized projects, anomalies slip through the cracks every day — sudden expenditure spikes right before election cycles, duplicate milestone invoicing, contractor cartels, and tragic delays where hospitals and roads remain unbuilt while funds remain locked.
-> 
-> Manual auditing simply cannot keep pace with this volume of data."
+## 🎙️ WORD-FOR-WORD VIDEO SCRIPT
 
 ---
 
-### **SECTION 2: PROBLEM STATEMENT DEEP-DIVE & GAP ANALYSIS (0:50 – 1:35)**
+## PART 1 — THE PROBLEM  (0:00 – 0:55)
 
-#### 🖥️ **What to Show on Screen:**
-- Briefly show the Problem Statement badge (`PS ID: 26102`) and scroll over the 4 jurisdictional tiers (Ministry Admin, State Nodal, District Collector, MP).
+### SCREEN: Title card then navigate to MoSPI MPLADS portal
 
-#### 🗣️ **Voiceover:**
-> "This brings us to **Problem Statement 26102** posed by the Ministry of Statistics and Programme Implementation (**MoSPI**):
-> The Ministry doesn't just need another database. They need an **intelligent, automated surveillance and audit decision-support layer** that sits on top of MPLADS to proactively flag high-risk anomalies, predict execution delays, and verify asset integrity *before* public money is lost.
-> 
-> Our team has built **MPALS** — the **MPLADS Anomaly & Lifecycle Surveillance** system. 
-> 
-> MPALS transforms MPLADS from a reactive record-keeping system into an **active, real-time audit defense shield**."
+[SPEAKER — calm, serious]
 
----
+"Every year, the Government of India releases Rs. 5 crore per Member of Parliament under the MPLADS scheme — the Members of Parliament Local Area Development Scheme.
 
-### **SECTION 3: ARCHITECTURE & DEFENSIBLE AI ENGINE (1:35 – 2:15)**
+That is Rs. 2,400 crore of public money every single year.
 
-#### 🖥️ **What to Show on Screen:**
-- Hover over the top bar where it says: *"Audit Decision Support • Statistical Anomaly & Risk Prioritization"*.
-- Highlight that the system runs on a **Full-Stack REST API** built with TypeScript, Node.js, Express, and dual database support (PostgreSQL & SQLite), with sub-second response times.
+This money is meant to build infrastructure — roads, schools, water systems — directly in the constituencies of MPs across India.
 
-#### 🗣️ **Voiceover:**
-> "Before we show you the live prototype, let's address the core engineering.
-> While many claim 'black-box machine learning' that cannot be justified in a court of audit, MPALS uses **transparent, defensible, multi-vector statistical anomaly detection**. 
-> 
-> Every single MP and work order is evaluated through **5 distinct forensic vectors**:
-> 1. **Z-Score National Outlier Analysis** — flagging extreme statistical deviations in expenditure velocity.
-> 2. **Interquartile Range (IQR) Fencing** — identifying anomalous allocation patterns.
-> 3. **State-Peer Variance** — comparing an MP's performance against their own state cohort.
-> 4. **Duplicate Transaction Forensics** — catching identical invoice amounts across concurrent works.
-> 5. **Term-Phase Compliance Scoring** — detecting artificial fund-dumping in election years.
-> 
-> This computes an objective, tamper-proof **Composite Risk Score from 0 to 100**."
+But here is the reality."
 
----
+### SCREEN: Show the MoSPI portal data view — the spreadsheet-style fund tracking
 
-### **SECTION 4: LIVE PROTOTYPE DEMONSTRATION (2:15 – 4:00)**
+[SPEAKER — measured, building urgency]
 
-#### 🖥️ **What to Show on Screen (Action Guide):**
+"All fund tracking and project monitoring today happens through manual entries on the MoSPI portal. District-level officers fill in forms. Nodal officers verify. Reports are filed.
 
-##### **Action 1: Role-Based Gateway (2:15 – 2:35)**
-- Click on **"Auto Sign In"** under **"🏛️ Ministry Admin (MoSPI)"**.
-- Notice the smooth transition to the Executive Dashboard.
-- **Voiceover:**
-  > "Let's log in as the **Ministry Admin**. MPALS features strict Role-Based Access Control (RBAC) across 4 tiers — MoSPI National Admins, State Nodal Officers, District Collectors, and Hon'ble MPs — ensuring cryptographically verified data boundaries."
+The problem? There is no automated layer that catches anomalies.
 
-##### **Action 2: Executive Dashboard & Live Telemetry (2:35 – 3:00)**
-- Point your cursor at the KPI Cards:
-  - Total MPs Analysed: **773**
-  - Total Funds: **₹11,681.9 Cr**
-  - Anomalies Detected: **155**
-  - Critical Risk MPs: **42**
-- Hover over the interactive charts:
-  - *Fund Allocation by State* (Chart.js bar chart).
-  - *Expenditure vs. Recommended Works* (Doughnut chart).
-- **Voiceover:**
-  > "Here on the Executive Dashboard, the Ministry gets immediate national situational awareness. Across all 773 MPs and 36 States, MPALS has ingested live allocation data and flagged **155 high-risk anomalies**, with **42 requiring urgent executive intervention**. No more searching through PDF stacks — risk is prioritized instantly."
+No flag when Rs. 47 lakhs is released to a contractor and the work completion report appears 11 months later — with no GPS-tagged photo evidence.
 
-##### **Action 3: Anomaly Detection Engine — The Star Feature (3:00 – 3:30)**
-- Click **"Anomaly Detection"** in the left sidebar (or top menu).
-- Show the filter bar: Select **Risk Level: "Critical"** or search for an MP like *"Shri Abdul Wahab"* or *"Shri Debashish Samantaray"*.
-- Expand/Click on an MP record to reveal the risk card.
-- **Voiceover:**
-  > "Let's open the **Anomaly Detection Engine**. 
-  > Notice how each MP is assigned an automated Risk Badge. For example, look at this flagged record: the system instantly highlights *why* it was flagged: a Z-score outlier of 3.42, 98% funds disbursed with only 12% physical work completion, and state-peer deviation exceeding 45%. 
-  > Vigilance teams receive clear, actionable evidence, not vague guesses."
+No alert when the same vendor wins back-to-back tenders across three districts.
 
-##### **Action 4: Interactive GIS Geolocation Mapping (3:30 – 3:45)**
-- Click **"Interactive Map"** in the sidebar.
-- Zoom in on India using the live Leaflet map. Click on clusters in high-anomaly states (e.g., Maharashtra or UP).
-- Click on a project pin to reveal the pop-up showing: *Project Name, Geo-coordinates, Contractor Name, and Current Completion %*.
-- **Voiceover:**
-  > "Next is our **Geospatial Asset Surveillance**. By mapping recommended works against geo-tagged coordinates, MPALS prevents 'ghost infrastructure' — where funds are claimed for community halls or roads that exist only on paper. District Collectors can verify physical ground truth in seconds."
+No system that detects when a project drags beyond its sanctioned timeline while more funds keep flowing in.
 
-##### **Action 5: Responsive Mobile Experience (3:45 – 4:00)**
-- Shrink the browser window or toggle mobile view.
-- Click the **`☰ Menu`** button to show the sleek slide-in navigation drawer.
-- **Voiceover:**
-  > "Furthermore, MPALS is built responsive from the ground up. Whether an officer is on a dual-monitor desktop or a District Collector is inspecting a construction site on a mobile phone, the interface adapts with zero layout clashing."
+The audit is always retrospective. The damage is already done."
+
+### SCREEN: Highlight key pain-point bullets on screen (animated text)
+
+[SPEAKER]
+
+"MoSPI identified this exact gap as a national-level priority.
+
+Their problem statement — SIH1770 — asks this question:
+
+'Can we build an AI-driven, real-time anomaly detection and surveillance system that monitors MPLADS fund flow, project lifecycle, and district-level compliance — proactively, before the audit?'
+
+That is the problem we chose. And we built Sanchi."
 
 ---
 
-### **SECTION 5: SYSTEM INTEGRATION & SCALABILITY (4:00 – 4:35)**
+---
 
-#### 🖥️ **What to Show on Screen:**
-- Click **"Generate Report"** in the topbar or navigate to **"Alerts & Flags"**.
-- Show the one-click **"Export Risk Report"** CSV and printable audit sheet.
+## PART 2 — THE SOLUTION  (0:55 – 1:40)
 
-#### 🗣️ **Voiceover:**
-> "How easily can this be deployed nationally?
-> MPALS is designed as a **zero-friction microservice layer**. It does not require replacing existing NIC infrastructure or the e-SAKSHI portal. It consumes standard data pipelines from PFMS and e-SAKSHI via secured REST APIs.
-> 
-> With sub-100 millisecond response times and lightweight SQLite/PostgreSQL caching, MPALS easily scales to monitor all 543 Lok Sabha and 245 Rajya Sabha constituencies concurrently with zero server strain."
+### SCREEN: Solution overview slide or the Sanchi system diagram
+
+[SPEAKER — confident, solution-oriented]
+
+"We call our system Sanchi.
+
+In Sanskrit and Hindi, Sanchi means 'Treasury' — a sacred collection, preserved and protected.
+
+Just as the ancient Sanchi Stupa stands as a monument of integrity across centuries, our system stands as a digital guardian over every rupee of public money."
+
+### SCREEN: Animate the 6 solution pillars one by one
+
+[SPEAKER]
+
+"Sanchi solves the MPLADS monitoring gap through six interlocking capabilities:
+
+ONE — Real-Time Anomaly Detection.
+Using a five-vector statistical engine — Z-Score outliers, fund release patterns, contractor repeat-win rates, timeline drift, and work completion gaps — Sanchi flags suspicious projects before the audit begins.
+
+TWO — AI Risk Scoring.
+Every project in the system receives a dynamic AI risk score — from 0 to 100 — computed live. High-risk projects are immediately escalated to senior officials.
+
+THREE — Role-Based Access Control.
+The platform is designed for government deployment. MP offices, District Collectors, Nodal Officers, and Auditors each see only what they are authorized to see. JWT-authenticated sessions, no exceptions.
+
+FOUR — GIS-Based Project Mapping.
+Every project is plotted on a live map of India — with fund utilization overlaid. You can see, district by district, where money is moving and where it is stalling.
+
+FIVE — Automated Reporting.
+Sanchi generates audit-ready PDF reports for any project or district — formatted for MoSPI compliance — in one click.
+
+SIX — Integration-Ready Architecture.
+The entire backend is built to plug directly into PFMS — the Public Financial Management System — and e-SAKSHI, the existing MoSPI digitization platform. Zero disruption to existing workflows."
 
 ---
 
-### **SECTION 6: THE WINNING CLOSING (4:35 – 5:00)**
+---
 
-#### 🖥️ **What to Show on Screen:**
-- Return to the **Executive Dashboard**.
-- Move cursor smoothly over the Ashoka Emblem and National Telemetry.
-- Bring up your team slide or contact screen.
+## PART 3 — OUR SYSTEM  (1:40 – 2:20)
 
-#### 🗣️ **Voiceover (Passionate, inspiring closing):**
-> "Public money is public trust. 
-> With MPALS, we are not just digitizing records — we are empowering our administrators with automated intelligence to safeguard every single rupee allocated for India's grassroots development.
-> 
-> From data entry to decision intelligence — this is **MPALS**.
-> Thank you, and Jai Hind!"
+### SCREEN: Technical architecture — split-screen showing frontend + backend
+
+[SPEAKER — technical, precise]
+
+"Let me show you how Sanchi is built — because a strong idea needs an even stronger implementation.
+
+Our frontend is a single-page application — pure HTML, CSS, and JavaScript — designed with a government-grade design system: navy blue, disciplined typography, and the Ashoka Chakra embedded in the system identity. No frameworks, no bloat. Fast and deployable on any government server.
+
+Our backend is an Express.js API built in TypeScript — fully typed, with structured middleware, modular routes, and error handling designed for production.
+
+Our database layer is dual-adapter — we run PostgreSQL in production on Render, and SQLite locally during development. The same code, same schema, zero configuration changes between environments.
+
+Our AI engine — the ai-engine module — runs server-side statistical anomaly detection across five dimensions per project:
+- Expenditure velocity
+- Contractor frequency index
+- Timeline deviation ratio
+- Document submission lag
+- Fund-to-completion ratio
+
+Each of these five vectors feeds a weighted composite score. No black box. Fully explainable. Fully auditable by MoSPI."
+
+### SCREEN: Show the render.yaml and the live Render deployment URL
+
+[SPEAKER]
+
+"And this is not a localhost demo.
+
+Sanchi is live and deployed — right now — on Render cloud, connected via GitHub CI/CD. Every push triggers a fresh build. The URL is active. The database is seeded. The system is running.
+
+This is a production-grade prototype."
 
 ---
 
-## 🏆 Judges Q&A Defense Sheet (Instant Knockout Answers)
+---
 
-| Potential Judge Question | Your Knockout Answer |
-| :--- | :--- |
-| **"Where is the Machine Learning? Is this just if-else rules?"** | *"Sir/Ma'am, in constitutional financial auditing, black-box ML models (like neural nets) are legally indefensible because you cannot justify why an MP was accused of fraud based on hidden weights. We deliberately chose **transparent, multi-vector statistical anomaly detection** (Z-Score, IQR fencing, peer clustering). It is deterministic, auditable, and withstands scrutiny in Parliamentary committees and CAG audits."* |
-| **"How will you get ground truth data for ghost assets?"** | *"MPALS integrates with the District Collectorate's geo-tagging mandate. Work milestones require GPS-stamped, time-stamped mobile camera uploads before PFMS disbursement releases the next milestone payment."* |
-| **"Can it handle live load from all districts?"** | *"Yes! Our prototype is already containerized and running live on the cloud. The backend REST API executes queries in under 15 milliseconds and supports lightweight SQLite for local/edge nodes and PostgreSQL for the national MoSPI repository."* |
-| **"Is it ready right now?"** | *"Yes! It is fully live right now at `sih-2026-mpals-main.onrender.com`. You can test every API, role, and chart on your phone or laptop right now."* |
+## PART 4 — PROTOTYPE TOUR  (2:20 – 4:10)
+
+### SCREEN: Navigate to https://sih-2026-mpals-main.onrender.com/
+
+[SPEAKER — energetic, demonstration mode]
+
+"Let me walk you through Sanchi live."
+
+---
+
+### PAGE: LOGIN
+
+[SPEAKER]
+
+"We open with the Secure Gateway — the Sanchi login portal.
+
+Notice the Government of India identity markers: the Ashoka Chakra emblem, the MoSPI branding, the Sanchi name in the header. This is not a generic login screen. It is built to look and feel like a real government system.
+
+I will log in as an Auditor — role-based access means I see the full audit dashboard."
+
+[Type credentials and click Login]
+
+---
+
+### PAGE: MAIN DASHBOARD
+
+[SPEAKER]
+
+"We land on the Main Surveillance Dashboard.
+
+At the top — four live KPI cards:
+- Total Projects monitored across India
+- Total Funds Released in crores
+- Active Anomalies Detected — flagged by the AI engine
+- High Risk Projects — requiring immediate attention
+
+These numbers are not static. They update as the database changes. This is live data."
+
+---
+
+### PAGE: ANOMALY DETECTION TABLE
+
+[SPEAKER]
+
+"Below — the Anomaly Intelligence Table.
+
+Every flagged project is listed with:
+- The project ID and district
+- The MP constituency
+- The specific anomaly type — whether it is a fund release mismatch, a contractor repeat-win, or a timeline breach
+- The AI Risk Score — colour-coded from green to red
+- And a direct action button to escalate or investigate
+
+This is the core of Sanchi. This is what MoSPI does not have today."
+
+---
+
+### PAGE: GIS MAP TAB
+
+[SPEAKER]
+
+"Now the GIS Project Map.
+
+Every single MPLADS project in our dataset is plotted here. The colour of each marker reflects fund utilization — green for on-track, yellow for delayed, red for critical.
+
+A District Collector can open this map on any device and immediately see where attention is needed. No report needed. No waiting for a quarterly audit."
+
+---
+
+### PAGE: PROJECT DETAILS DRILL-DOWN
+
+[SPEAKER]
+
+"Clicking into any project opens the Project Intelligence Card.
+
+You see the full lifecycle: sanctions, releases, expenditures, work completion status, and the AI engine's detailed risk breakdown — all five vectors — side by side.
+
+The system explains why a project is flagged. Not just a red flag — a full reasoning chain. This is built for accountability."
+
+---
+
+### PAGE: REPORT GENERATION
+
+[SPEAKER]
+
+"And finally — one-click audit report generation.
+
+The system compiles all project data, anomaly flags, and risk scores into a structured PDF — formatted for MoSPI's reporting standards. Ready to submit. Ready to defend in an audit."
+
+---
+
+---
+
+## PART 5 — THE CLOSE  (4:10 – 4:45)
+
+### SCREEN: Pull back to show the full live dashboard — hold for 3 seconds
+
+[SPEAKER — slow, powerful, deliberate]
+
+"Every year, Rs. 2,400 crore of public money flows into MPLADS.
+
+Every year, the audit happens after the fact — after delays, after diversions, after the damage is recorded.
+
+Sanchi changes that equation.
+
+Not after the fact. In real time.
+Not retrospective. Proactive.
+Not another report. Intelligence."
+
+### SCREEN: Fade to Sanchi logo — clean, centered, with the tagline below
+
+[SPEAKER — final line, firm and clear]
+
+"We did not build a dashboard.
+
+We built a guardian for public money.
+
+Sanchi — MPLADS Anomaly and Lifecycle Surveillance Intelligence.
+
+Smart India Hackathon 2026. We are ready."
+
+[End screen: Team name · Institution · Problem Statement SIH1770 · Live URL]
+
+---
+
+---
+
+## 📋 Recording Checklist
+
+- [ ] Open the live URL: https://sih-2026-mpals-main.onrender.com/
+- [ ] Full-screen browser (F11), hide bookmarks bar
+- [ ] Use demo login credentials — do not show personal passwords
+- [ ] Record at 1920x1080 minimum — OBS Studio or Loom
+- [ ] Narrate clearly — speak at 80% of normal pace
+- [ ] Trim all dead-air pauses in editing
+- [ ] Add soft background music at 15% volume
+- [ ] Add text overlays at each section transition
+- [ ] End with a 3-second hold on the Sanchi logo
+
+---
+
+## 🔗 Key Reference Links
+
+| Resource | Link |
+|:---|:---|
+| Live Prototype | https://sih-2026-mpals-main.onrender.com/ |
+| GitHub Repository | https://github.com/Amizhthan404/SIH-2026---MPALS-main |
+| MoSPI MPLADS Portal | https://mplads.gov.in/ |
+| Problem Statement | SIH1770 — Ministry of Statistics and Programme Implementation |
+| PFMS Integration Target | https://pfms.nic.in/ |
+
+---
+
+Script Version 2.0 — Sanchi Rebrand — SIH 2026

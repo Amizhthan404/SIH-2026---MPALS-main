@@ -79,7 +79,7 @@ async function start() {
 
     const server = app.listen(env.PORT, () => {
       console.log('====================================================');
-      console.log(` MPALS — MPLADS Anomaly & Lifecycle Surveillance`);
+      console.log(` Sanchi — MPLADS Anomaly & Lifecycle Surveillance`);
       console.log(` Prototype for SIH 2026 (Problem Statement 26102)`);
       console.log(` Server URL : http://localhost:${env.PORT}`);
       console.log(` API URL    : http://localhost:${env.PORT}/api`);

@@ -118,7 +118,7 @@ function getDeterministicOffset(id: string): { dLat: number; dLng: number } {
 }
 
 async function seed() {
-  console.log('🌱 Starting MPALS database seeding pipeline...');
+  console.log('🌱 Starting Sanchi database seeding pipeline...');
   const db = await getDb();
 
   // Load raw dataset

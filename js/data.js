@@ -1,5 +1,5 @@
 /**
- * MPALS Platform — API Client & Data Service Layer
+ * Sanchi Platform — API Client & Data Service Layer
  * Connects the vanilla JS frontend with the Express REST API (/api/mps, /api/works, /api/alerts, /api/states, /api/data)
  */
 
@@ -11,8 +11,8 @@ const ApiClient = (() => {
       ? ''
       : 'http://localhost:5000';
 
-  const TOKEN_KEY = 'mpals_auth_token';
-  const USER_KEY = 'mpals_auth_user';
+  const TOKEN_KEY = 'Sanchi_auth_token';
+  const USER_KEY = 'Sanchi_auth_user';
 
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);

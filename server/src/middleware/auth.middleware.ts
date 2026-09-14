@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'mpals-sih2026-secure-jwt-signing-secret-key-32chars';
+export const JWT_SECRET = process.env.JWT_SECRET || 'Sanchi-sih2026-secure-jwt-signing-secret-key-32chars';
 
 export interface AuthenticatedUser {
   id: string;

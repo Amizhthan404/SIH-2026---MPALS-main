@@ -1,4 +1,4 @@
-# MPALS — MPLADS Anomaly & Lifecycle Surveillance
+# Sanchi — MPLADS Anomaly & Lifecycle Surveillance
 ### Smart India Hackathon 2026 | Problem Statement ID: 26102
 **Ministry of Statistics & Programme Implementation (MoSPI), Government of India**  
 *Student Prototype for Decision Support & Scheme Integrity Auditing*
@@ -14,13 +14,13 @@ The **Members of Parliament Local Area Development Scheme (MPLADS)** involves th
 - Payment disbursements in PFMS/EAT may occur ahead of certified ground execution.
 - High-value completed assets frequently lack third-party geo-tagged verification.
 
-**MPALS** is an end-to-end full-stack platform providing **explainable statistical anomaly detection, jurisdictional RBAC scoping, and an interactive investigation workspace** for Ministry, State, and District authorities.
+**Sanchi** is an end-to-end full-stack platform providing **explainable statistical anomaly detection, jurisdictional RBAC scoping, and an interactive investigation workspace** for Ministry, State, and District authorities.
 
 ---
 
 ## 🔬 Statistical Anomaly Engine (What We Actually Built)
 
-We do **not** make exaggerated claims of black-box "deep learning" or opaque neural networks that cannot be audited or explained to a district magistrate. Instead, MPALS implements **rigorous, explainable statistical surveillance & anomaly scoring**:
+We do **not** make exaggerated claims of black-box "deep learning" or opaque neural networks that cannot be audited or explained to a district magistrate. Instead, Sanchi implements **rigorous, explainable statistical surveillance & anomaly scoring**:
 
 | Anomaly Detection Method | Statistical Model & Mathematical Formulation | Administrative Purpose |
 |---|---|---|
@@ -37,7 +37,7 @@ Every risk score is **100% explainable**: clicking any MP or alert opens an item
 
 ## 🛡️ Role-Based Access Control (RBAC) & Security
 
-MPALS implements real **JSON Web Token (JWT)** session security and **bcrypt password hashing** (`saltRounds=10`). API endpoints are strictly guarded by middleware:
+Sanchi implements real **JSON Web Token (JWT)** session security and **bcrypt password hashing** (`saltRounds=10`). API endpoints are strictly guarded by middleware:
 - **Ministry Admin** (`role = 'Ministry'`): Unrestricted national scope across all 773 MPs, 36 States/UTs, and all works.
 - **State Nodal Officer** (`role = 'State'`): Automatically restricted via `req.user.scope_id` to MPs, alerts, and works in their assigned state (e.g., Maharashtra).
 - **District Collector** (`role = 'District'`): Scoped to works and assets within their administrative district.
@@ -58,7 +58,7 @@ MPALS implements real **JSON Web Token (JWT)** session security and **bcrypt pas
 
 ## 🔍 Investigation Workspace & Audit Triage
 
-Alerts in MPALS are not static warnings—they feed directly into an interactive **Investigation Workspace**:
+Alerts in Sanchi are not static warnings—they feed directly into an interactive **Investigation Workspace**:
 1. **Explainable Why Flagged**: Displays the exact algorithmic formula, deviation standard deviations, and ledger discrepancy.
 2. **Evidence Breakdown**: Compares sanctioned cost, cumulative expenditure, payment timestamps, and asset verification status.
 3. **Audit Trail**: Shows detection timestamp, current status (`Open`, `Under Review`, `Resolved`, `False Positive`), and the last officer to review the case.
@@ -117,8 +117,8 @@ Access the platform in your browser at:
 
 | Timestamp | Screen / Action | What to Say / Point Out to Judges |
 |---|---|---|
-| **0:00 – 0:30** | **Top Info Bar & Provenance** | *"Welcome, respected jury members. This is MPALS, developed for MoSPI Problem Statement 26102. Notice our top bar: we clearly label data provenance—our 773 MPs are derived from official MPLADS allocation records, while works and ledgers model real PFMS transactions."* |
-| **0:30 – 1:00** | **Executive Dashboard & Statistical Rigor** | *"Instead of claiming an untrainable 'black box ML' model, MPALS uses explainable statistical surveillance: parametric Z-score, IQR fencing, cohort peer variance, and milestone divergence. Notice our live KPIs: total MPs, fund allocations, and risk distributions computed directly from SQLite."* |
+| **0:00 – 0:30** | **Top Info Bar & Provenance** | *"Welcome, respected jury members. This is Sanchi, developed for MoSPI Problem Statement 26102. Notice our top bar: we clearly label data provenance—our 773 MPs are derived from official MPLADS allocation records, while works and ledgers model real PFMS transactions."* |
+| **0:30 – 1:00** | **Executive Dashboard & Statistical Rigor** | *"Instead of claiming an untrainable 'black box ML' model, Sanchi uses explainable statistical surveillance: parametric Z-score, IQR fencing, cohort peer variance, and milestone divergence. Notice our live KPIs: total MPs, fund allocations, and risk distributions computed directly from SQLite."* |
 | **1:00 – 1:45** | **Works Monitoring & Payment vs. Progress** | *Click 'Works Monitoring'. Filter by 'Payment Gaps'. Click a flagged work.*<br/>*"Here is our milestone surveillance: we track cumulative financial releases against physical ground completion. Notice this project where 90% of funds were disbursed while physical progress is only 15%—a classic pre-execution risk."* |
 | **1:45 – 2:30** | **Alerts & Investigation Workspace** | *Click 'Alerts & Flags'. Click 'Investigate 🔍' on a Critical alert.*<br/>*"Every alert opens our Investigation Workspace. It doesn't just show an error—it gives an explainable breakdown of why it was flagged, the numerical deviation, and the audit trail. In guest mode, triage is locked."* |
 | **2:30 – 3:00** | **Role Switcher & RBAC Scoping** | *Click the top-right Role button. Select 'State Nodal Officer (Maharashtra)'.*<br/>*"With one click, we sign in using real JWT and bcrypt authentication. Notice how the entire dashboard instantly re-scopes to Maharashtra only. The officer can now triage the alert and mark it 'Under Review' or 'Resolved', recording their official identity in the audit log."* |
@@ -128,7 +128,7 @@ Access the platform in your browser at:
 ## 📁 Repository Structure
 
 ```
-SIH-2026---MPALS/
+SIH-2026---Sanchi/
 ├── index.html                   # Official Government-style SPA interface
 ├── css/
 │   ├── main.css                 # Government UI design system (MoSPI / NIC standard)

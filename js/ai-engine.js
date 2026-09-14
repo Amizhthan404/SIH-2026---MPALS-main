@@ -1,5 +1,5 @@
 /**
- * MPALS Platform — UI Formatting & Presentation Helpers
+ * Sanchi Platform — UI Formatting & Presentation Helpers
  * Notice: All statistical anomaly scoring and risk assessment is computed
  * authoritatively on the backend server (AIEngineService) and returned via REST APIs.
  */
