@@ -1113,25 +1113,48 @@ async function setPublicViewerMode() {
 
 // ── Landing Login Gateway Handlers ─────────────────────────────────────
 async function submitLandingLogin() {
-  const email = document.getElementById('landing-email')?.value.trim();
+  const email    = document.getElementById('landing-email')?.value.trim();
   const password = document.getElementById('landing-password')?.value.trim();
+  const captchaDisplay = document.getElementById('landing-captcha-display')?.textContent.trim();
+  const captchaInput   = document.getElementById('landing-captcha-input')?.value.trim().toUpperCase();
+
   if (!email || !password) {
-    showToast('Please enter both email and password', 'high');
+    showToast('Access denied — email and password are required.', 'high');
+    return;
+  }
+  // Validate CAPTCHA
+  if (!captchaInput || captchaInput !== (captchaDisplay || '').toUpperCase()) {
+    showToast('⛔ CAPTCHA verification failed — please try again.', 'high');
+    refreshCaptcha();
+    const captchaBox = document.querySelector('.login-captcha-box');
+    if (captchaBox) {
+      captchaBox.style.animation = 'none';
+      captchaBox.style.border = '1px solid #EF4444';
+      setTimeout(() => { captchaBox.style.border = ''; }, 2000);
+    }
     return;
   }
   try {
-    showToast('Authenticating with official MoSPI gateway...', 'info');
+    showToast('🔐 Authenticating with official MoSPI gateway...', 'info');
     const result = await ApiClient.login(email, password);
     const landing = document.getElementById('login-landing-page');
     if (landing) landing.classList.add('hidden');
     hideCheatsheetTab();
     updateAuthUI();
-    showToast(`Welcome ${result.user.name}! Authenticated as ${result.user.role}`, 'success');
+    showToast(`✅ Welcome ${result.user.name}! Authenticated as ${result.user.role}`, 'success');
     await reloadDataset();
   } catch (err) {
-    showToast(`Authentication failed: ${err.message}`, 'high');
+    showToast(`⛔ Authentication failed: ${err.message}`, 'high');
+    // Shake the login card for visual feedback
+    const card = document.querySelector('.login-sec-card');
+    if (card) {
+      card.style.animation = 'shake 0.4s ease';
+      setTimeout(() => { card.style.animation = ''; }, 500);
+    }
+    refreshCaptcha();
   }
 }
+
 
 async function autoFillLandingRole(email, password) {
   const emailInput = document.getElementById('landing-email');

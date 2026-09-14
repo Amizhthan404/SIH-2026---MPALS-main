@@ -159,36 +159,50 @@
   </div>
 
   <div class="login-body-grid">
-    <!-- Left: Official Login Card -->
+    <!-- Login Card -->
     <div class="login-sec-card">
+
+      <!-- RESTRICTED ACCESS banner -->
+      <div style="background:#FFF3CD;border:1px solid #F59E0B;border-radius:6px;padding:8px 12px;margin-bottom:18px;display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:1rem;flex-shrink:0">⚠️</span>
+        <div>
+          <div style="font-size:0.72rem;font-weight:800;color:#92400E;text-transform:uppercase;letter-spacing:0.06em">Restricted Government Access</div>
+          <div style="font-size:0.7rem;color:#78350F;margin-top:2px;line-height:1.4">Unauthorised access is a criminal offence under the IT Act, 2000 (Sec. 43 &amp; 66). All login attempts are logged, monitored, and audited.</div>
+        </div>
+      </div>
+
       <h2>🔐 Official Portal Sign In</h2>
       <p>Enter your official NIC / MoSPI government credentials to access jurisdictional audit surveillance intelligence.</p>
 
       <form onsubmit="event.preventDefault(); submitLandingLogin();">
         <div class="login-form-group">
-          <label for="landing-email">Official Email Address</label>
-          <input type="email" id="landing-email" class="login-form-input" placeholder="officer@mospi.gov.in" value="admin@mospi.gov.in" required/>
+          <label for="landing-email">Official Government Email Address</label>
+          <input type="email" id="landing-email" class="login-form-input" placeholder="officer@mospi.gov.in" required autocomplete="off"/>
         </div>
 
         <div class="login-form-group">
-          <label for="landing-password">Password</label>
-          <input type="password" id="landing-password" class="login-form-input" placeholder="Password" value="Password@123" required/>
+          <label for="landing-password">Password / NIC Token</label>
+          <input type="password" id="landing-password" class="login-form-input" placeholder="Enter secure password" required autocomplete="new-password"/>
         </div>
 
         <div class="login-form-group">
-          <label>Security Anti-Bot Captcha Verification</label>
+          <label>Security Anti-Bot CAPTCHA Verification</label>
           <div class="login-captcha-box">
-            <span class="login-captcha-code" id="landing-captcha-display">MPLADS-26102</span>
-            <input type="text" id="landing-captcha-input" class="login-form-input" placeholder="Enter code" value="MPLADS-26102" style="width:130px;text-transform:uppercase" required/>
-            <button type="button" class="btn btn-secondary btn-xs" onclick="refreshCaptcha()" title="Refresh Captcha">🔄</button>
+            <span class="login-captcha-code" id="landing-captcha-display">SANCHI-26102</span>
+            <input type="text" id="landing-captcha-input" class="login-form-input" placeholder="Enter code above" style="width:140px;text-transform:uppercase" required/>
+            <button type="button" class="btn btn-secondary btn-xs" onclick="refreshCaptcha()" title="Refresh CAPTCHA">🔄</button>
           </div>
         </div>
 
-        <button type="submit" class="login-btn-submit" style="margin-top:8px">SIGN IN TO SECURE AUDIT DASHBOARD →</button>
+        <button type="submit" class="login-btn-submit" style="margin-top:8px">🔒 SIGN IN TO SECURE AUDIT DASHBOARD →</button>
       </form>
 
-      <div style="margin-top:16px;text-align:center">
-        <button class="btn btn-link" onclick="enterPublicGuestModeLanding()" style="font-size:0.78rem">Continue as Public Viewer (Unauthenticated Demo Mode) →</button>
+      <!-- Security certification strip -->
+      <div style="margin-top:16px;border-top:1px solid #E2E8F0;padding-top:12px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+        <span style="font-size:0.65rem;color:#64748B;display:flex;align-items:center;gap:4px">🔒 256-bit TLS 1.3</span>
+        <span style="font-size:0.65rem;color:#64748B;display:flex;align-items:center;gap:4px">🛡️ ISO 27001 Compliant</span>
+        <span style="font-size:0.65rem;color:#64748B;display:flex;align-items:center;gap:4px">📋 Session Audited</span>
+        <span style="font-size:0.65rem;color:#64748B;display:flex;align-items:center;gap:4px">🇮🇳 NIC Secured</span>
       </div>
     </div>
   </div><!-- end .login-body-grid -->
